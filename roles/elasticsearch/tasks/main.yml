@@ -1,0 +1,21 @@
+---
+- name: Instalar Elasticsearch
+  apt:
+    name: elasticsearch
+    state: present
+    update_cache: yes
+
+- name: Desplegar elasticsearch.yml
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+    mode: '0660'
+  notify: Restart Elasticsearch
+
+- name: Asegurar que Elasticsearch esté iniciado y habilitado
+  systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes

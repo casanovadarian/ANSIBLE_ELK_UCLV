@@ -7,5 +7,4 @@
 
 - name: Ejecutar configuración de Clientes Proxy (Nodos remotos)
   ansible.builtin.include_tasks: client.yaml
-#  when: inventory_hostname == 'kubernetes'
-  when: "'kubernetes' in group_names"
+  when: "'all' in group_names"

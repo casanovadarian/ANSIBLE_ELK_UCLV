@@ -1,0 +1,18 @@
+---
+- name: Instalar paquetes base
+  apt:
+    name: [apt-transport-https, gpg, curl, openjdk-17-jdk]
+    state: present
+    update_cache: yes
+
+- name: Agregar clave GPG de Elastic
+  get_url:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    dest: /usr/share/keyrings/elasticsearch-keyring.gpg
+    mode: '0644'
+
+- name: Agregar repositorio de Elastic
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/9.x/apt stable main"
+    state: present
+    filename: elastic-9.x
