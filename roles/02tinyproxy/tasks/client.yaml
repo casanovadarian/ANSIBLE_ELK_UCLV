@@ -34,10 +34,10 @@
     group: root
     mode: '0644'
 
-- name: Probar curl hacia registry.k8s.io/v2 usando el proxy
+- name: Probar curl hacia google.com usando el proxy
   ansible.builtin.shell: |
     source /etc/profile.d/tinyproxy_proxy.sh
-    curl -I https://registry.k8s.io/v2/
+    curl -I https://google.com
   args:
     executable: /bin/bash
   register: curl_registry_check
