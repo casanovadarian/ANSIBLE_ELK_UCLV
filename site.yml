@@ -1,0 +1,31 @@
+---
+# site.yml
+
+# 0. Recolectar facts de todos los hosts que vamos a usar (remotos + laptop local)
+#    Necesario porque local.yaml de tinyproxy usa hostvars de elk/monitoring
+- name: Recolectar facts
+  hosts: localhost,elk,monitoring
+  gather_facts: yes
+
+# 1. Repos UCLV + actualización de paquetes (solo nodos remotos)
+- name: Preparación de repositorios y paquetes
+  hosts: elk,monitoring
+  become: yes
+  roles:
+    - 01reposUCLV
+
+# 2. Tinyproxy: servidor en localhost + clientes en los nodos remotos
+#    (el propio rol decide internamente local.yaml vs client.yaml por inventory_hostname)
+- name: Configurar Tinyproxy
+  hosts: localhost,elk,monitoring
+  become: yes
+  roles:
+    - 02tinyproxy
+
+# --- Se irán agregando a medida que estén listos ---
+# - name: Instalar y configurar Elasticsearch
+#   hosts: elk
+#   become: yes
+#   roles:
+#     - common
+#     - elasticsearch
