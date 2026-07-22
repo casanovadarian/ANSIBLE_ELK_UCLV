@@ -7,4 +7,4 @@
 
 - name: Ejecutar configuración de Clientes Proxy (Nodos remotos)
   ansible.builtin.include_tasks: client.yaml
-  when: "'all' in group_names"
+  when: inventory_hostname != 'localhost'
