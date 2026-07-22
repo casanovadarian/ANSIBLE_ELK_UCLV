@@ -1,0 +1,11 @@
+---
+# roles/02tinyproxy/tasks/main.yml
+
+- name: Ejecutar configuración del Servidor Tinyproxy (Localhost)
+  ansible.builtin.include_tasks: local.yaml
+  when: inventory_hostname == 'localhost'
+
+- name: Ejecutar configuración de Clientes Proxy (Nodos remotos)
+  ansible.builtin.include_tasks: client.yaml
+#  when: inventory_hostname == 'kubernetes'
+  when: "'kubernetes' in group_names"
