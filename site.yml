@@ -14,18 +14,38 @@
   roles:
     - 01reposUCLV
 
-# 2. Tinyproxy: servidor en localhost + clientes en los nodos remotos
-#    (el propio rol decide internamente local.yaml vs client.yaml por inventory_hostname)
-- name: Configurar Tinyproxy
-  hosts: localhost,elk,monitoring
+# 2a. Tinyproxy: servidor en localhost (play propio, bloquea hasta terminar)
+- name: Configurar servidor Tinyproxy (localhost)
+  hosts: localhost
+  become: yes
+  vars_prompt:
+    - name: local_become_pass
+      prompt: "Contraseña de sudo para localhost"
+      private: yes
+  vars:
+    ansible_become_pass: "{{ local_become_pass }}"
+  roles:
+    - 02tinyproxy
+
+# 2b. Tinyproxy: clientes en los nodos remotos
+#     Arranca solo cuando 2a terminó por completo -> tinyproxy_host/tinyproxy_port
+#     ya existen en hostvars['localhost'] de forma garantizada.
+- name: Configurar clientes Tinyproxy (nodos remotos)
+  hosts: elk,monitoring
   become: yes
   roles:
     - 02tinyproxy
 
-# --- Se irán agregando a medida que estén listos ---
-# - name: Instalar y configurar Elasticsearch
-#   hosts: elk
-#   become: yes
-#   roles:
-#     - common
-#     - elasticsearch
+# 3. Rol Common: Configuraciones base y dependencias
+- name: Aplicar configuraciones comunes
+  hosts: elk,monitoring
+  become: yes
+  roles:
+    - common
+
+# 4. Rol Elasticsearch: Instalar y configurar el clúster
+- name: Desplegar clúster de Elasticsearch
+  hosts: elk
+  become: yes
+  roles:
+    - elasticsearch
