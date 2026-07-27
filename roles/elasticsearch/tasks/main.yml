@@ -1,12 +1,61 @@
 ---
+# roles/elasticsearch/tasks/main.yml
 - name: Instalar Elasticsearch
-  apt:
+  ansible.builtin.apt:
     name: elasticsearch
     state: present
     update_cache: yes
 
+- name: Asegurar que el directorio de datos exista con permisos correctos (/mnt/datos)
+  ansible.builtin.file:
+    path: /mnt/datos
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0750'
+
+- name: Crear directorio certs en todos los nodos
+  ansible.builtin.file:
+    path: /etc/elasticsearch/certs
+    state: directory
+    owner: root
+    group: elasticsearch
+    mode: '0750'
+
+- name: Generar CA en el primer nodo
+  ansible.builtin.command: >
+    /usr/share/elasticsearch/bin/elasticsearch-certutil ca --out /etc/elasticsearch/certs/elastic-stack-ca.p12 --pass ""
+  args:
+    creates: /etc/elasticsearch/certs/elastic-stack-ca.p12
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+
+- name: Generar certificado de transporte en el primer nodo
+  ansible.builtin.command: >
+    /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca /etc/elasticsearch/certs/elastic-stack-ca.p12 --ca-pass "" --out /etc/elasticsearch/certs/transport.p12 --pass ""
+  args:
+    creates: /etc/elasticsearch/certs/transport.p12
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+
+- name: Extraer certificado de transporte del primer nodo a la laptop local
+  ansible.builtin.fetch:
+    src: /etc/elasticsearch/certs/transport.p12
+    dest: /tmp/transport.p12
+    flat: yes
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+
+- name: Distribuir certificado de transporte a todos los nodos
+  ansible.builtin.copy:
+    src: /tmp/transport.p12
+    dest: /etc/elasticsearch/certs/transport.p12
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0600'
+
 - name: Desplegar elasticsearch.yml
-  template:
+  ansible.builtin.template:
     src: elasticsearch.yml.j2
     dest: /etc/elasticsearch/elasticsearch.yml
     owner: root
@@ -14,8 +63,72 @@
     mode: '0660'
   notify: Restart Elasticsearch
 
+- name: Crear directorio override para systemd de Elasticsearch
+  ansible.builtin.file:
+    path: /etc/systemd/system/elasticsearch.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Configurar LimitMEMLOCK infinito para el servicio
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/elasticsearch.service.d/override.conf
+    content: |
+      [Service]
+      LimitMEMLOCK=infinity
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Recargar el demonio de systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Iniciar Elasticsearch en el primer nodo para inicializar el bootstrap
+  ansible.builtin.systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes
+  when: inventory_hostname == groups['elk'][0]
+
+- name: Pausar para que el nodo primario estabilice el clúster
+  ansible.builtin.pause:
+    seconds: 15
+  run_once: true
+
+# 2. Limpiar datos locales en nodos secundarios para evitar conflictos de estado previo
+- name: Detener Elasticsearch en nodos secundarios por seguridad antes de limpiar
+  ansible.builtin.systemd:
+    name: elasticsearch
+    state: stopped
+  when: inventory_hostname != groups['elk'][0]
+
+- name: Limpiar directorio de datos en nodos secundarios para una unión limpia
+  ansible.builtin.file:
+    path: /mnt/datos
+    state: absent
+  when: inventory_hostname != groups['elk'][0]
+
+- name: Recrear directorio de datos con permisos correctos en nodos secundarios
+  ansible.builtin.file:
+    path: /mnt/datos
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0750'
+  when: inventory_hostname != groups['elk'][0]
+
+# 3. Iniciar los nodos secundarios para que se unan al clúster existente
+- name: Iniciar Elasticsearch en los nodos secundarios del clúster
+  ansible.builtin.systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes
+  when: inventory_hostname != groups['elk'][0]
+
 - name: Asegurar que Elasticsearch esté iniciado y habilitado
-  systemd:
+  ansible.builtin.systemd:
     name: elasticsearch
     state: started
     enabled: yes
