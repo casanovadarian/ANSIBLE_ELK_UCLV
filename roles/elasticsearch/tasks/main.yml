@@ -92,9 +92,17 @@
     enabled: yes
   when: inventory_hostname == groups['elk'][0]
 
-- name: Pausar para que el nodo primario estabilice el clúster
-  ansible.builtin.pause:
-    seconds: 15
+- name: Esperar a que el nodo primario responda en el puerto HTTP (Salud del clúster)
+  ansible.builtin.uri:
+    url: "https://{{ groups['elk'][0] }}:9200/_cluster/health"
+    user: elastic
+    password: "{{ elastic_password | default('') }}"
+    validate_certs: no
+    status_code: [200, 401]
+  register: cluster_health
+  until: cluster_health.status is defined
+  retries: 30
+  delay: 5
   run_once: true
 
 # 2. Limpiar datos locales en nodos secundarios para evitar conflictos de estado previo
