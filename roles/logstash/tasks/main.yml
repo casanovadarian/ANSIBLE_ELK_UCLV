@@ -1,0 +1,76 @@
+---
+- name: Instalar Logstash
+  ansible.builtin.apt:
+    name: logstash
+    state: present
+    update_cache: yes
+
+- name: Crear directorios de configuración y certificados
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - /etc/logstash/conf.d
+    - /etc/logstash/certs
+
+- name: Obtener el certificado CA de Elasticsearch desde el primer nodo
+  ansible.builtin.fetch:
+    src: /etc/elasticsearch/certs/elastic-stack-ca.p12
+    dest: /tmp/elastic-stack-ca.p12
+    flat: yes
+  delegate_to: "{{ groups['elk'][0] }}"
+  run_once: true
+
+- name: Extraer el certificado CA en formato PEM (sin clave privada)
+  ansible.builtin.shell: |
+    openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/logstash/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
+  args:
+    creates: /etc/logstash/certs/elasticsearch-ca.pem
+  notify: Reiniciar Logstash
+
+- name: Establecer permisos del certificado
+  ansible.builtin.file:
+    path: /etc/logstash/certs/elasticsearch-ca.pem
+    owner: root
+    group: logstash
+    mode: '0640'
+
+- name: Desplegar archivos de configuración de pipelines
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/logstash/conf.d/{{ item }}"
+    owner: root
+    group: logstash
+    mode: '0644'
+  loop:
+    - 01-input.conf
+    - 10-filter-syslog-base.conf
+    - 20-filter-sw-core-puerta-254.conf
+    - 50-filter-haproxy.conf
+    - 60-filter-switches.conf
+    - 90-filter.conf
+    - 99-output.conf
+  notify: Reiniciar Logstash
+
+- name: Configurar JVM heap mínimo
+  ansible.builtin.lineinfile:
+    path: /etc/logstash/jvm.options
+    regexp: '^-Xms'
+    line: '-Xms{{ logstash_heap_min }}'
+  notify: Reiniciar Logstash
+
+- name: Configurar JVM heap máximo
+  ansible.builtin.lineinfile:
+    path: /etc/logstash/jvm.options
+    regexp: '^-Xmx'
+    line: '-Xmx{{ logstash_heap_max }}'
+  notify: Reiniciar Logstash
+
+- name: Habilitar e iniciar Logstash
+  ansible.builtin.systemd:
+    name: logstash
+    enabled: yes
+    state: started

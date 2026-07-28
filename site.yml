@@ -69,3 +69,12 @@
     # Puedes definir aquí elasticsearch_password si no está en vars globales
   roles:
     - kibana
+
+# 6. Rol Logstash
+- name: Desplegar Logstash
+  hosts: monitoring  # o el grupo que corresponda
+  become: yes
+  vars:
+    ansible_become_pass: "{{ local_become_pass }}"
+  roles:
+    - logstash

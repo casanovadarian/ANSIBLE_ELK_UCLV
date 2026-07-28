@@ -1,0 +1,27 @@
+---
+# Elasticsearch
+logstash_elasticsearch_hosts:
+  - "10.12.1.34"
+  - "10.12.1.35"
+  - "10.12.1.36"
+logstash_elasticsearch_port: 9200
+logstash_elasticsearch_user: "elastic"
+logstash_elasticsearch_password: "h9oveUPLR32TPdnB"   # Mejor usar vault
+logstash_ssl_enabled: true
+logstash_ssl_ca: "/etc/logstash/certs/elasticsearch-ca.pem"
+
+# Switch core
+logstash_switch_core_ip: "10.12.0.254"
+
+# IPs de HAProxy
+logstash_haproxy_ips:
+  - "10.12.1.5"
+  - "10.12.1.9"
+  - "10.12.1.74"
+  - "10.12.1.73"
+  - "10.12.1.72"
+  - "10.12.1.80"
+
+# JVM heap
+logstash_heap_min: "512m"
+logstash_heap_max: "1g"
