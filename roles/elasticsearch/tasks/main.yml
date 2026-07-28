@@ -22,6 +22,16 @@
     group: elasticsearch
     mode: '0750'
 
+- name: Eliminar certificados previos autogenerados por el paquete en el nodo primario
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/elasticsearch/certs/elastic-stack-ca.p12
+    - /etc/elasticsearch/certs/transport.p12
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+
 - name: Generar CA en el primer nodo
   ansible.builtin.command: >
     /usr/share/elasticsearch/bin/elasticsearch-certutil ca --out /etc/elasticsearch/certs/elastic-stack-ca.p12 --pass ""
@@ -30,7 +40,7 @@
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
 
-- name: Generar certificado de transporte en el primer nodo
+- name: Generar certificado de transporte sin contraseña en el primer nodo
   ansible.builtin.command: >
     /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca /etc/elasticsearch/certs/elastic-stack-ca.p12 --ca-pass "" --out /etc/elasticsearch/certs/transport.p12 --pass ""
   args:
@@ -54,6 +64,20 @@
     group: elasticsearch
     mode: '0600'
 
+- name: Limpiar contraseñas del keystore local en TODOS los nodos
+  ansible.builtin.shell: |
+    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.transport.ssl.keystore.secure_password || true
+    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.transport.ssl.truststore.secure_password || true
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
+
+- name: Restaurar permisos del keystore tras la limpieza en todos los nodos
+  ansible.builtin.file:
+    path: /etc/elasticsearch/elasticsearch.keystore
+    owner: root
+    group: elasticsearch
+    mode: '0660'
+    
 - name: Desplegar elasticsearch.yml
   ansible.builtin.template:
     src: elasticsearch.yml.j2
@@ -94,10 +118,10 @@
 
 - name: Esperar a que el nodo primario responda en el puerto HTTP (Salud del clúster)
   ansible.builtin.uri:
-    url: "https://{{ groups['elk'][0] }}:9200/_cluster/health"
+    url: "http://{{ groups['elk'][0] }}:9200/_cluster/health"
     user: elastic
     password: "{{ elastic_password | default('') }}"
-    validate_certs: no
+    force_basic_auth: yes
     status_code: [200, 401]
   register: cluster_health
   until: cluster_health.status is defined
