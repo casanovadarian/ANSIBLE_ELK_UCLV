@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+server.port: {{ kibana_port }}
+server.host: "{{ kibana_host }}"
+server.name: "{{ inventory_hostname }}"
+
+elasticsearch.hosts: [{% for host in elasticsearch_hosts %}"http://{{ host }}:9200"{% if not loop.last %}, {% endif %}{% endfor %}]
+
+# Si tienes seguridad habilitada en Elasticsearch (usuario/contraseña)
+elasticsearch.username: "{{ elasticsearch_username }}"
+elasticsearch.password: "{{ elasticsearch_password }}"
+
+# Si usas SSL entre Kibana y Elasticsearch (recomendado)
+# elasticsearch.ssl.certificateAuthorities: [ "/etc/elasticsearch/certs/elastic-stack-ca.p12" ]
+# elasticsearch.ssl.verificationMode: certificate
+
+# Configuración de logging (opcional)
+logging:
+  appenders:
+    file:
+      type: file
+      fileName: /var/log/kibana/kibana.log
+      layout:
+        type: json
+  root:
+    appenders: [default, file]

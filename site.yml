@@ -59,3 +59,13 @@
   become: yes
   roles:
     - elasticsearch
+
+# 5. Rol Kibana
+- name: Desplegar Kibana
+  hosts: kibana
+  become: yes
+  vars:
+    ansible_become_pass: "{{ local_become_pass }}"
+    # Puedes definir aquí elasticsearch_password si no está en vars globales
+  roles:
+    - kibana

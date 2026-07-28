@@ -1,0 +1,7 @@
+#roles/kibana/defaults/main.yml
+---
+kibana_port: 5601
+kibana_host: "0.0.0.0"  # Escucha en todas las interfaces; ajusta si quieres solo la IP interna
+elasticsearch_hosts: "{{ groups['elk'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
+elasticsearch_username: "elastic"
+elasticsearch_password: ""  # Debes establecer esta variable de forma segura (por ej. desde vault)

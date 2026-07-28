@@ -176,3 +176,13 @@
     name: elasticsearch
     state: started
     enabled: yes
+
+- name: Establecer contraseña para usuario elastic (si no está definida)
+  ansible.builtin.shell: |
+    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i <<< "{{ elastic_password }}"
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
+  when: elastic_password is defined and elastic_password != ""
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+  no_log: true

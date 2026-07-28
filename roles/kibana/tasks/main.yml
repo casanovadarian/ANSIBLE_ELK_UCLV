@@ -1,0 +1,44 @@
+#roles/kibana/tasks/main.yml
+---
+- name: Instalar Kibana
+  ansible.builtin.apt:
+    name: kibana
+    state: present
+    update_cache: yes
+
+- name: Crear directorio de configuración (si no existe)
+  ansible.builtin.file:
+    path: /etc/kibana
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Desplegar kibana.yml
+  ansible.builtin.template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reiniciar Kibana
+
+# Si usas SSL entre Kibana y Elasticsearch, podrías copiar el certificado de transporte
+# y configurarlo en kibana.yml, pero es opcional.
+
+- name: Habilitar e iniciar Kibana
+  ansible.builtin.systemd:
+    name: kibana
+    enabled: yes
+    state: started
+
+# Opcional: esperar a que Kibana esté disponible
+- name: Esperar a que Kibana responda
+  ansible.builtin.uri:
+    url: "http://{{ ansible_default_ipv4.address }}:{{ kibana_port }}/api/status"
+    status_code: 200
+  register: kibana_status
+  until: kibana_status.status == 200
+  retries: 30
+  delay: 5
+  when: inventory_hostname == groups['kibana'][0]  # si hay varios, uno solo
