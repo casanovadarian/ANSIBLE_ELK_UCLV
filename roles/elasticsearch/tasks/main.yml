@@ -141,27 +141,27 @@
   delay: 5
   run_once: true
 
-# 2. Limpiar datos locales en nodos secundarios para evitar conflictos de estado previo
-- name: Detener Elasticsearch en nodos secundarios por seguridad antes de limpiar
-  ansible.builtin.systemd:
-    name: elasticsearch
-    state: stopped
-  when: inventory_hostname != groups['elk'][0]
+#- name: Detener Elasticsearch en nodos secundarios por seguridad antes de limpiar
+#  ansible.builtin.systemd:
+#    name: elasticsearch
+#    state: stopped
+#  when: inventory_hostname != groups['elk'][0]
+#
+#- name: Limpiar directorio de datos en nodos secundarios para una unión limpia
+#  ansible.builtin.file:
+#    path: /mnt/datos
+#    state: absent
+#  when: inventory_hostname != groups['elk'][0]
+#
+#- name: Recrear directorio de datos con permisos correctos en nodos secundarios
+#  ansible.builtin.file:
+#    path: /mnt/datos
+#    state: directory
+#    owner: elasticsearch
+#    group: elasticsearch
+#    mode: '0750'
+#  when: inventory_hostname != groups['elk'][0]
 
-- name: Limpiar directorio de datos en nodos secundarios para una unión limpia
-  ansible.builtin.file:
-    path: /mnt/datos
-    state: absent
-  when: inventory_hostname != groups['elk'][0]
-
-- name: Recrear directorio de datos con permisos correctos en nodos secundarios
-  ansible.builtin.file:
-    path: /mnt/datos
-    state: directory
-    owner: elasticsearch
-    group: elasticsearch
-    mode: '0750'
-  when: inventory_hostname != groups['elk'][0]
 
 # 3. Iniciar los nodos secundarios para que se unan al clúster existente
 - name: Iniciar Elasticsearch en los nodos secundarios del clúster
