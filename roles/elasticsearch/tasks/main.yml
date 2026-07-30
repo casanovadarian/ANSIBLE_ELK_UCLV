@@ -14,13 +14,18 @@
     group: elasticsearch
     mode: '0750'
 
-- name: Crear directorio certs en todos los nodos
+# ============================================
+# GESTIÓN DE CERTIFICADOS Y KEYSTORE
+# ============================================
+
+- name: Verificar si el directorio certs existe
   ansible.builtin.file:
     path: /etc/elasticsearch/certs
     state: directory
     owner: root
     group: elasticsearch
     mode: '0750'
+  when: inventory_hostname in groups['elk']
 
 - name: Comprobar si ya existe una CA personalizada
   ansible.builtin.stat:
@@ -29,7 +34,7 @@
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
 
-- name: Eliminar certificado de transporte de apt solo en la primera instalación
+- name: Eliminar certificado de transporte si la CA no existe (primera instalación)
   ansible.builtin.file:
     path: /etc/elasticsearch/certs/transport.p12
     state: absent
@@ -37,17 +42,23 @@
   delegate_to: "{{ groups['elk'][0] }}"
   when: not ca_cert.stat.exists
 
-- name: Generar CA en el primer nodo
+- name: Generar CA en el primer nodo (sin contraseña)
   ansible.builtin.command: >
-    /usr/share/elasticsearch/bin/elasticsearch-certutil ca --out /etc/elasticsearch/certs/elastic-stack-ca.p12 --pass ""
+    /usr/share/elasticsearch/bin/elasticsearch-certutil ca
+    --out /etc/elasticsearch/certs/elastic-stack-ca.p12
+    --pass ""
   args:
     creates: /etc/elasticsearch/certs/elastic-stack-ca.p12
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
 
-- name: Generar certificado de transporte sin contraseña en el primer nodo
+- name: Generar certificado de transporte (sin contraseña)
   ansible.builtin.command: >
-    /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca /etc/elasticsearch/certs/elastic-stack-ca.p12 --ca-pass "" --out /etc/elasticsearch/certs/transport.p12 --pass ""
+    /usr/share/elasticsearch/bin/elasticsearch-certutil cert
+    --ca /etc/elasticsearch/certs/elastic-stack-ca.p12
+    --ca-pass ""
+    --out /etc/elasticsearch/certs/transport.p12
+    --pass ""
   args:
     creates: /etc/elasticsearch/certs/transport.p12
   run_once: true
@@ -68,24 +79,91 @@
     owner: elasticsearch
     group: elasticsearch
     mode: '0600'
+  when: inventory_hostname in groups['elk'] and inventory_hostname != groups['elk'][0]
 
-- name: Limpiar contraseñas del keystore local en TODOS los nodos
+- name: Verificar que todos los nodos tengan el certificado
+  ansible.builtin.stat:
+    path: /etc/elasticsearch/certs/transport.p12
+  register: transport_cert_exists
+  when: inventory_hostname in groups['elk']
+
+- name: Asegurar que el certificado existe en todos los nodos
+  ansible.builtin.copy:
+    src: /tmp/transport.p12
+    dest: /etc/elasticsearch/certs/transport.p12
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0600'
+  when: 
+    - inventory_hostname in groups['elk']
+    - not transport_cert_exists.stat.exists
+
+# ============================================
+# CONFIGURACIÓN DEL KEYSTORE
+# ============================================
+
+- name: Crear keystore de Elasticsearch si no existe
   ansible.builtin.shell: |
-    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.transport.ssl.keystore.secure_password
-    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.transport.ssl.truststore.secure_password
+    if [ ! -f /etc/elasticsearch/elasticsearch.keystore ]; then
+      /usr/share/elasticsearch/bin/elasticsearch-keystore create
+    fi
   environment:
     ES_PATH_CONF: /etc/elasticsearch
-  register: keystore_cleanup
-  failed_when: false
-  changed_when: keystore_cleanup.rc == 0
+  when: inventory_hostname in groups['elk']
   notify: Restart Elasticsearch
 
-- name: Restaurar permisos del keystore tras la limpieza en todos los nodos
+- name: Verificar si el keystore existe
+  ansible.builtin.stat:
+    path: /etc/elasticsearch/elasticsearch.keystore
+  register: keystore_file
+  when: inventory_hostname in groups['elk']
+
+- name: Configurar keystore con contraseñas vacías en TODOS los nodos
+  ansible.builtin.shell: |
+    # Eliminar entradas existentes si existen
+    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.transport.ssl.keystore.secure_password 2>/dev/null || true
+    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.transport.ssl.truststore.secure_password 2>/dev/null || true
+    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.http.ssl.keystore.secure_password 2>/dev/null || true
+    /usr/share/elasticsearch/bin/elasticsearch-keystore remove xpack.security.http.ssl.truststore.secure_password 2>/dev/null || true
+
+    # Agregar contraseñas vacías
+    echo "" | /usr/share/elasticsearch/bin/elasticsearch-keystore add -f xpack.security.transport.ssl.keystore.secure_password
+    echo "" | /usr/share/elasticsearch/bin/elasticsearch-keystore add -f xpack.security.transport.ssl.truststore.secure_password
+    echo "" | /usr/share/elasticsearch/bin/elasticsearch-keystore add -f xpack.security.http.ssl.keystore.secure_password
+    echo "" | /usr/share/elasticsearch/bin/elasticsearch-keystore add -f xpack.security.http.ssl.truststore.secure_password
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
+  when: 
+    - inventory_hostname in groups['elk']
+    - keystore_file.stat.exists
+  notify: Restart Elasticsearch
+
+- name: Establecer permisos del keystore si existe
   ansible.builtin.file:
     path: /etc/elasticsearch/elasticsearch.keystore
     owner: root
     group: elasticsearch
     mode: '0660'
+  when: 
+    - inventory_hostname in groups['elk']
+    - keystore_file.stat.exists
+
+# ============================================
+# VERIFICACIÓN DE CERTIFICADOS Y KEYSTORE
+# ============================================
+
+- name: Verificar que el certificado es legible con contraseña vacía
+  ansible.builtin.shell: |
+    openssl pkcs12 -in /etc/elasticsearch/certs/transport.p12 -info -nodes -passin pass: -noout 2>&1
+  register: cert_check
+  when: inventory_hostname in groups['elk']
+  ignore_errors: yes
+  changed_when: false
+
+- name: Mostrar estado del certificado
+  ansible.builtin.debug:
+    msg: "Certificado transport.p12 en {{ inventory_hostname }}: {{ 'OK' if cert_check.rc == 0 else 'PROBLEMA' }}"
+  when: inventory_hostname in groups['elk']
 
 - name: Desplegar elasticsearch.yml
   ansible.builtin.template:
