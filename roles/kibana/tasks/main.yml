@@ -15,15 +15,17 @@
 
 - name: Obtener certificado CA para Kibana
   ansible.builtin.fetch:
-    src: "/etc/elasticsearch/certs/elastic-stack-ca.p12"
+    src: "{{ elastic_ca_cert | default('/etc/elasticsearch/certs/elastic-stack-ca.p12') }}"
     dest: /tmp/elastic-stack-ca.p12
     flat: yes
   delegate_to: "{{ groups['elk'][0] }}"
   run_once: true
 
-- name: Convertir certificado a PEM para Kibana
+- name: Convertir certificado a PEM para Kibana (si no existe)
   ansible.builtin.shell: |
-    openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/kibana/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
+    if [ ! -f /etc/kibana/certs/elasticsearch-ca.pem ]; then
+      openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/kibana/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
+    fi
   args:
     creates: /etc/kibana/certs/elasticsearch-ca.pem
 
@@ -34,12 +36,7 @@
     group: kibana
     mode: '0640'
 
-# DEBUG - Verificar que la contraseña está disponible
-- name: Debug - Mostrar si la contraseña está definida
-  ansible.builtin.debug:
-    msg: "Contraseña de Elastic: {{ elastic_password | default('NO DEFINIDA') }}"
-
-- name: Configurar kibana.yml con contraseña
+- name: Configurar kibana.yml con token de enrollamiento
   ansible.builtin.template:
     src: kibana.yml.j2
     dest: /etc/kibana/kibana.yml
@@ -48,13 +45,13 @@
     mode: '0644'
   notify: Reiniciar Kibana
 
-- name: Debug - Mostrar contenido de kibana.yml
+- name: Debug - Mostrar configuración de Kibana
   ansible.builtin.shell: |
-    cat /etc/kibana/kibana.yml | grep password
+    cat /etc/kibana/kibana.yml | grep -E "elasticsearch|enrollment"
   register: kibana_config_debug
   changed_when: false
 
-- name: Debug - Resultado
+- name: Debug - Resultado configuración
   ansible.builtin.debug:
     var: kibana_config_debug.stdout_lines
 
@@ -71,9 +68,7 @@
   register: kibana_status
   until: 
     - kibana_status.status == 200
-    - kibana_status.json is defined
     - kibana_status.json.status is defined
-    - kibana_status.json.status.overall is defined
     - kibana_status.json.status.overall.level == "available"
   retries: 60
   delay: 5

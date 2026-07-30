@@ -52,3 +52,22 @@
       ansible.builtin.debug:
         var: kibana_config.stdout_lines
       when: inventory_hostname in groups['kibana']
+
+- name: Verificar token de Kibana
+  ansible.builtin.debug:
+    msg: "Token de Kibana: {{ kibana_enrollment_token | default('NO GENERADO') }}"
+  when: inventory_hostname in groups['elk']
+
+- name: Verificar autenticación de Kibana
+  ansible.builtin.shell: |
+    curl -s -o /dev/null -w "%{http_code}" \
+      -H "Authorization: Bearer {{ kibana_enrollment_token }}" \
+      https://localhost:9200/
+  register: token_test
+  when: inventory_hostname in groups['elk'] and kibana_enrollment_token is defined
+  ignore_errors: yes
+
+- name: Estado del token
+  ansible.builtin.debug:
+    msg: "Token de Kibana: {{ 'VÁLIDO' if token_test.stdout == '200' else 'INVÁLIDO' }}"
+  when: inventory_hostname in groups['elk']

@@ -33,16 +33,3 @@
     owner: root
     group: root
     mode: '0644'
-
-- name: Probar curl hacia google.com usando el proxy
-  ansible.builtin.shell: |
-    source /etc/profile.d/tinyproxy_proxy.sh
-    curl -I https://google.com
-  args:
-    executable: /bin/bash
-  register: curl_registry_check
-  changed_when: false
-
-- name: Mostrar resultado de la prueba curl
-  ansible.builtin.debug:
-    var: curl_registry_check.stdout_lines

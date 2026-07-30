@@ -206,42 +206,10 @@
 - name: Aplicar reinicios pendientes (cargar nuevos certificados y config en memoria)
   ansible.builtin.meta: flush_handlers
 
-- name: Esperar a que el nodo primario responda en el puerto HTTP (Salud del clúster)
-  ansible.builtin.uri:
-    url: "http://{{ groups['elk'][0] }}:9200/_cluster/health"
-    user: elastic
-    password: "{{ elastic_password | default('') }}"
-    force_basic_auth: yes
-    status_code: [200, 401]
-  register: cluster_health
-  until: cluster_health.status is defined
-  retries: 30
-  delay: 5
-  run_once: true
+# ============================================
+# Iniciar los nodos secundarios para que se unan al clúster existente
+# ============================================
 
-#- name: Detener Elasticsearch en nodos secundarios por seguridad antes de limpiar
-#  ansible.builtin.systemd:
-#    name: elasticsearch
-#    state: stopped
-#  when: inventory_hostname != groups['elk'][0]
-#
-#- name: Limpiar directorio de datos en nodos secundarios para una unión limpia
-#  ansible.builtin.file:
-#    path: /mnt/datos
-#    state: absent
-#  when: inventory_hostname != groups['elk'][0]
-#
-#- name: Recrear directorio de datos con permisos correctos en nodos secundarios
-#  ansible.builtin.file:
-#    path: /mnt/datos
-#    state: directory
-#    owner: elasticsearch
-#    group: elasticsearch
-#    mode: '0750'
-#  when: inventory_hostname != groups['elk'][0]
-
-
-# 3. Iniciar los nodos secundarios para que se unan al clúster existente
 - name: Iniciar Elasticsearch en los nodos secundarios del clúster
   ansible.builtin.systemd:
     name: elasticsearch
@@ -254,8 +222,6 @@
     name: elasticsearch
     state: started
     enabled: yes
-
-# ... tus tareas existentes ...
 
 - name: Establecer contraseña usando script de Python (método más confiable)
   ansible.builtin.shell: |
@@ -298,3 +264,67 @@
   delegate_facts: true
   loop: "{{ groups['all'] }}"
   run_once: true
+
+- name: Esperar a que el nodo primario responda en el puerto HTTPS (Salud del clúster)
+  ansible.builtin.uri:
+    url: "https://{{ groups['elk'][0] }}:9200/_cluster/health"
+    user: elastic
+    password: "{{ elastic_password }}"
+    force_basic_auth: yes
+    validate_certs: no  # Cambiado a 'no' porque el certificado es autofirmado
+    status_code: [200, 401]
+  register: cluster_health
+  until: cluster_health.status is defined
+  retries: 30
+  delay: 5
+  run_once: true
+
+# ============================================
+# GENERACIÓN DE TOKEN PARA KIBANA
+# ============================================
+
+- name: Generar token de enrollamiento para Kibana
+  ansible.builtin.shell: |
+    /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
+  register: kibana_token_result
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+  changed_when: false
+  no_log: false  # Cambiar a true en producción para ocultar el token
+
+- name: Guardar token de Kibana como variable
+  ansible.builtin.set_fact:
+    kibana_enrollment_token: "{{ kibana_token_result.stdout.strip() }}"
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+
+- name: Exponer token de Kibana a todos los hosts
+  ansible.builtin.set_fact:
+    kibana_enrollment_token: "{{ kibana_enrollment_token }}"
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['all'] }}"
+  run_once: true
+
+- name: Guardar token en archivo local (seguro)
+  ansible.builtin.copy:
+    content: |
+      KIBANA ENROLLMENT TOKEN
+      ======================
+      Generated: {{ ansible_date_time.iso8601 }}
+      
+      Token: {{ kibana_enrollment_token }}
+      
+      Use this token to enroll Kibana with Elasticsearch.
+    dest: "~/kibana_token_{{ ansible_date_time.epoch }}.txt"
+    mode: '0600'
+  run_once: true
+  delegate_to: localhost
+
+- name: Mostrar token de Kibana (solo para debug)
+  ansible.builtin.debug:
+    msg: "Kibana enrollment token: {{ kibana_enrollment_token }}"
+  run_once: true
+  when: ansible_verbosity >= 2  # Solo mostrar en modo verbose
