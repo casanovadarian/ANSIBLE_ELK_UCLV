@@ -1,20 +1,54 @@
 ---
-- name: Diagnóstico de credenciales
+- name: Diagnóstico completo del ELK stack
   hosts: all
-  gather_facts: false
+  gather_facts: yes
   tasks:
-    - name: Mostrar contraseña por host
+    - name: Mostrar IP y rol
       ansible.builtin.debug:
-        msg: "{{ inventory_hostname }} - elastic_password: {{ elastic_password | default('NO DEFINIDA') }}"
-    
-    - name: Verificar en el nodo ELK
-      ansible.builtin.shell: |
-        curl -s -u elastic:{{ elastic_password }} -X GET "https://localhost:9200/_cluster/health" -k
-      register: cluster_health_check
+        msg: "{{ inventory_hostname }} - IP: {{ ansible_default_ipv4.address }} - Rol: {{ group_names }}"
+
+    - name: Verificar contraseña de Elasticsearch
+      ansible.builtin.debug:
+        msg: "Contraseña de elastic: {{ elastic_password | default('NO DEFINIDA') }}"
       when: inventory_hostname in groups['elk']
+
+    - name: Verificar estado de Elasticsearch
+      ansible.builtin.uri:
+        url: "http://localhost:9200/_cluster/health"
+        user: elastic
+        password: "{{ elastic_password }}"
+        force_basic_auth: yes
+        status_code: 200
+      register: es_status
+      when: inventory_hostname in groups['elk'] and elastic_password is defined
       ignore_errors: yes
-      
-    - name: Mostrar resultado del health check
+
+    - name: Mostrar estado del clúster
       ansible.builtin.debug:
-        var: cluster_health_check.stdout
+        msg: "Estado de Elasticsearch: {{ es_status.json.status if es_status.status == 200 else 'NO ACCESIBLE' }}"
       when: inventory_hostname in groups['elk']
+
+    - name: Verificar Kibana
+      ansible.builtin.uri:
+        url: "http://localhost:5601/api/status"
+        status_code: 200
+      register: kibana_status
+      when: inventory_hostname in groups['kibana']
+      ignore_errors: yes
+
+    - name: Mostrar estado de Kibana
+      ansible.builtin.debug:
+        msg: "Kibana: {{ 'Disponible' if kibana_status.status == 200 else 'NO DISPONIBLE' }}"
+      when: inventory_hostname in groups['kibana']
+
+    - name: Mostrar archivo de configuración de Kibana
+      ansible.builtin.shell: |
+        grep -E "elasticsearch.username|elasticsearch.password|elasticsearch.hosts" /etc/kibana/kibana.yml
+      register: kibana_config
+      when: inventory_hostname in groups['kibana']
+      ignore_errors: yes
+
+    - name: Configuración de Kibana
+      ansible.builtin.debug:
+        var: kibana_config.stdout_lines
+      when: inventory_hostname in groups['kibana']
