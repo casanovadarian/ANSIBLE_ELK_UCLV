@@ -177,57 +177,38 @@
     state: started
     enabled: yes
 
-- name: Establecer contraseña para usuario elastic de forma interactiva
+- name: Establecer contraseña fija para elastic
   ansible.builtin.shell: |
-    # Intentar obtener contraseña existente o generar una nueva
-    if /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b 2>/dev/null | grep -q "New password:"; then
-      /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b | grep "New password:" | awk '{print $NF}'
-    else
-      # Si no se puede resetear, intentar verificar si ya tiene contraseña
-      echo ""
-    fi
+    echo "y" | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i <<< "{{ elastic_password }}"
   environment:
     ES_PATH_CONF: /etc/elasticsearch
   register: elastic_password_result
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
   changed_when: false
-  no_log: true
+  no_log: false
+  ignore_errors: yes
 
-- name: Verificar si se generó una contraseña
-  ansible.builtin.set_fact:
-    elastic_password: "{{ elastic_password_result.stdout.strip() }}"
-  run_once: true
-
-- name: Fallback - Generar contraseña manualmente si es necesario
-  ansible.builtin.shell: |
-    # Si no hay contraseña, generar una aleatoria y establecerla
-    if [ -z "{{ elastic_password }}" ]; then
-      NEW_PASS=$(openssl rand -base64 24)
-      echo "y" | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i <<< "${NEW_PASS}" > /dev/null 2>&1
-      echo "${NEW_PASS}"
-    else
-      echo "{{ elastic_password }}"
-    fi
-  environment:
-    ES_PATH_CONF: /etc/elasticsearch
-  register: elastic_password_fallback
-  run_once: true
-  delegate_to: "{{ groups['elk'][0] }}"
-  changed_when: false
-  no_log: true
-  when: elastic_password == ""
-
-- name: Establecer contraseña final
-  ansible.builtin.set_fact:
-    elastic_password: "{{ elastic_password_fallback.stdout.strip() if elastic_password == '' else elastic_password }}"
-  run_once: true
-
-# ¡IMPORTANTE! Exponer la contraseña a todos los hosts
-- name: Exponer contraseña para todos los hosts en el inventario
+- name: Exponer contraseña para todos los hosts
   ansible.builtin.set_fact:
     elastic_password: "{{ elastic_password }}"
   delegate_to: "{{ item }}"
   delegate_facts: true
   loop: "{{ groups['all'] }}"
+  run_once: true
+
+- name: Verificar que Elasticsearch está respondiendo
+  ansible.builtin.uri:
+    url: "https://localhost:9200/_cluster/health"
+    validate_certs: no
+  register: es_health
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+  until: es_health.status == 200
+  retries: 30
+  delay: 5
+
+- name: Debug - Estado del clúster
+  ansible.builtin.debug:
+    msg: "Elasticsearch está activo: {{ es_health.json.status }}"
   run_once: true
