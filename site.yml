@@ -64,17 +64,53 @@
 - name: Desplegar Kibana
   hosts: kibana
   become: yes
-  vars:
-    ansible_become_pass: "{{ local_become_pass }}"
-    # Puedes definir aquí elasticsearch_password si no está en vars globales
   roles:
     - kibana
 
 # 6. Rol Logstash
 - name: Desplegar Logstash
-  hosts: monitoring  # o el grupo que corresponda
+  hosts: monitoring  
   become: yes
-  vars:
-    ansible_become_pass: "{{ local_become_pass }}"
+#  vars:
+#    ansible_become_pass: "{{ local_become_pass }}"
   roles:
     - logstash
+  
+# 7. Mostrar credenciales generadas
+- name: Mostrar información de acceso
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Mostrar credenciales de Elasticsearch
+      ansible.builtin.debug:
+        msg: |
+          ========================================
+          ACCESO AL CLÚSTER ELASTICSEARCH
+          ========================================
+          URL: https://{{ hostvars[groups['elk'][0]]['ansible_default_ipv4']['address'] }}:9200
+          Usuario: elastic
+          Contraseña: {{ hostvars[groups['elk'][0]]['elastic_password'] }}
+          ========================================
+          ACCESO A KIBANA
+          ========================================
+          URL: http://{{ hostvars[groups['kibana'][0]]['ansible_default_ipv4']['address'] }}:5601
+          Usuario: elastic
+          Contraseña: {{ hostvars[groups['elk'][0]]['elastic_password'] }}
+          ========================================
+
+    - name: Guardar credenciales en archivo local
+      ansible.builtin.copy:
+        content: |
+          ELASTICSEARCH CLUSTER CREDENTIALS
+          =================================
+          Generated: {{ ansible_date_time.iso8601 }}
+          
+          Elasticsearch URL: https://{{ hostvars[groups['elk'][0]]['ansible_default_ipv4']['address'] }}:9200
+          Username: elastic
+          Password: {{ hostvars[groups['elk'][0]]['elastic_password'] }}
+          
+          Kibana URL: http://{{ hostvars[groups['kibana'][0]]['ansible_default_ipv4']['address'] }}:5601
+          Username: elastic
+          Password: {{ hostvars[groups['elk'][0]]['elastic_password'] }}
+        dest: "~/elastic_credentials_{{ ansible_date_time.epoch }}.txt"
+        mode: '0600'

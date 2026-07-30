@@ -6,25 +6,43 @@
     state: present
     update_cache: yes
 
-- name: Crear directorio de configuración (si no existe)
+- name: Crear directorio de certificados
   ansible.builtin.file:
-    path: /etc/kibana
+    path: /etc/kibana/certs
     state: directory
     owner: root
-    group: root
-    mode: '0755'
+    group: kibana
+    mode: '0750'
 
-- name: Desplegar kibana.yml
+- name: Obtener certificado CA para Kibana
+  ansible.builtin.fetch:
+    src: "{{ elastic_ca_cert }}"
+    dest: /tmp/elastic-stack-ca.p12
+    flat: yes
+  delegate_to: "{{ groups['elk'][0] }}"
+  run_once: true
+
+- name: Convertir certificado a PEM para Kibana
+  ansible.builtin.shell: |
+    openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/kibana/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
+  args:
+    creates: /etc/kibana/certs/elasticsearch-ca.pem
+
+- name: Establecer permisos del certificado
+  ansible.builtin.file:
+    path: /etc/kibana/certs/elasticsearch-ca.pem
+    owner: root
+    group: kibana
+    mode: '0640'
+
+- name: Configurar kibana.yml con contraseña
   ansible.builtin.template:
     src: kibana.yml.j2
     dest: /etc/kibana/kibana.yml
     owner: root
-    group: root
+    group: kibana
     mode: '0644'
   notify: Reiniciar Kibana
-
-# Si usas SSL entre Kibana y Elasticsearch, podrías copiar el certificado de transporte
-# y configurarlo en kibana.yml, pero es opcional.
 
 - name: Habilitar e iniciar Kibana
   ansible.builtin.systemd:
@@ -32,13 +50,12 @@
     enabled: yes
     state: started
 
-# Opcional: esperar a que Kibana esté disponible
-- name: Esperar a que Kibana responda
+- name: Esperar a que Kibana esté saludable
   ansible.builtin.uri:
-    url: "http://{{ ansible_default_ipv4.address }}:{{ kibana_port }}/api/status"
+    url: "http://localhost:{{ kibana_port }}/api/status"
     status_code: 200
   register: kibana_status
-  until: kibana_status.status == 200
-  retries: 30
+  until: kibana_status.json.status.overall.level == "available"
+  retries: 60
   delay: 5
-  when: inventory_hostname == groups['kibana'][0]  # si hay varios, uno solo
+  when: inventory_hostname == groups['kibana'][0]

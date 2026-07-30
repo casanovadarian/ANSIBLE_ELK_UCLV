@@ -1,0 +1,6 @@
+---
+# group_vars/all.yml
+elastic_stack_version: "9.x"
+elastic_password: ""  # Se generará dinámicamente
+elastic_ca_cert: "/etc/elasticsearch/certs/elastic-stack-ca.p12"
+elastic_transport_cert: "/etc/elasticsearch/certs/transport.p12"

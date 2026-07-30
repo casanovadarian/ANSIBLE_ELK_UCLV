@@ -16,20 +16,19 @@
     - /etc/logstash/conf.d
     - /etc/logstash/certs
 
-- name: Obtener el certificado CA de Elasticsearch desde el primer nodo
+- name: Obtener certificado CA para Logstash
   ansible.builtin.fetch:
-    src: /etc/elasticsearch/certs/elastic-stack-ca.p12
+    src: "{{ elastic_ca_cert }}"
     dest: /tmp/elastic-stack-ca.p12
     flat: yes
   delegate_to: "{{ groups['elk'][0] }}"
   run_once: true
 
-- name: Extraer el certificado CA en formato PEM (sin clave privada)
+- name: Convertir certificado a PEM para Logstash
   ansible.builtin.shell: |
     openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/logstash/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
   args:
     creates: /etc/logstash/certs/elasticsearch-ca.pem
-  notify: Reiniciar Logstash
 
 - name: Establecer permisos del certificado
   ansible.builtin.file:

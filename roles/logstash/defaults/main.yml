@@ -1,12 +1,9 @@
 ---
 # Elasticsearch
-logstash_elasticsearch_hosts:
-  - "10.12.1.34"
-  - "10.12.1.35"
-  - "10.12.1.36"
+logstash_elasticsearch_hosts: "{{ groups['elk'] }}"
 logstash_elasticsearch_port: 9200
 logstash_elasticsearch_user: "elastic"
-logstash_elasticsearch_password: "h9oveUPLR32TPdnB"   # Mejor usar vault
+logstash_elasticsearch_password: "{{ elastic_password }}"
 logstash_ssl_enabled: true
 logstash_ssl_ca: "/etc/logstash/certs/elasticsearch-ca.pem"
 

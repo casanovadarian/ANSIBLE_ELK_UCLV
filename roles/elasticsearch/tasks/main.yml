@@ -177,12 +177,39 @@
     state: started
     enabled: yes
 
-- name: Establecer contraseña para usuario elastic (si no está definida)
+- name: Establecer contraseña para usuario elastic
   ansible.builtin.shell: |
-    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i <<< "{{ elastic_password }}"
+    # Verificar si la contraseña ya está establecida
+    if /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b 2>/dev/null | grep -q "New password:"; then
+      /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b | grep "New password:" | awk '{print $NF}'
+    else
+      echo "{{ elastic_password | default('') }}"
+    fi
   environment:
     ES_PATH_CONF: /etc/elasticsearch
-  when: elastic_password is defined and elastic_password != ""
+  register: elastic_password_result
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
+  changed_when: false
   no_log: true
+
+- name: Guardar la contraseña generada como variable de host
+  ansible.builtin.set_fact:
+    elastic_password: "{{ elastic_password_result.stdout.strip() }}"
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
+
+- name: Guardar la contraseña en un archivo local (solo para referencia)
+  ansible.builtin.copy:
+    content: |
+      Contraseña de elastic generada: {{ elastic_password_result.stdout.strip() }}
+      Fecha: {{ ansible_date_time.iso8601 }}
+    dest: "/tmp/elastic_password_{{ ansible_date_time.epoch }}.txt"
+    mode: '0600'
+  run_once: true
+  delegate_to: localhost
+  when: elastic_password_result.stdout.strip() != ""
+
+- name: Exponer contraseña para otros plays
+  ansible.builtin.set_fact:
+    elastic_password: "{{ elastic_password_result.stdout.strip() }}"
