@@ -1,4 +1,3 @@
-#roles/kibana/tasks/main.yml
 ---
 - name: Instalar Kibana
   ansible.builtin.apt:
@@ -16,7 +15,7 @@
 
 - name: Obtener certificado CA para Kibana
   ansible.builtin.fetch:
-    src: "{{ elastic_ca_cert }}"
+    src: "/etc/elasticsearch/certs/elastic-stack-ca.p12"
     dest: /tmp/elastic-stack-ca.p12
     flat: yes
   delegate_to: "{{ groups['elk'][0] }}"
@@ -35,6 +34,11 @@
     group: kibana
     mode: '0640'
 
+# DEBUG - Verificar que la contraseña está disponible
+- name: Debug - Mostrar si la contraseña está definida
+  ansible.builtin.debug:
+    msg: "Contraseña de Elastic: {{ elastic_password | default('NO DEFINIDA') }}"
+
 - name: Configurar kibana.yml con contraseña
   ansible.builtin.template:
     src: kibana.yml.j2
@@ -43,6 +47,16 @@
     group: kibana
     mode: '0644'
   notify: Reiniciar Kibana
+
+- name: Debug - Mostrar contenido de kibana.yml
+  ansible.builtin.shell: |
+    cat /etc/kibana/kibana.yml | grep password
+  register: kibana_config_debug
+  changed_when: false
+
+- name: Debug - Resultado
+  ansible.builtin.debug:
+    var: kibana_config_debug.stdout_lines
 
 - name: Habilitar e iniciar Kibana
   ansible.builtin.systemd:
@@ -55,7 +69,12 @@
     url: "http://localhost:{{ kibana_port }}/api/status"
     status_code: 200
   register: kibana_status
-  until: kibana_status.json.status.overall.level == "available"
+  until: 
+    - kibana_status.status == 200
+    - kibana_status.json is defined
+    - kibana_status.json.status is defined
+    - kibana_status.json.status.overall is defined
+    - kibana_status.json.status.overall.level == "available"
   retries: 60
   delay: 5
   when: inventory_hostname == groups['kibana'][0]

@@ -177,13 +177,14 @@
     state: started
     enabled: yes
 
-- name: Establecer contraseña para usuario elastic
+- name: Establecer contraseña para usuario elastic de forma interactiva
   ansible.builtin.shell: |
-    # Verificar si la contraseña ya está establecida
+    # Intentar obtener contraseña existente o generar una nueva
     if /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b 2>/dev/null | grep -q "New password:"; then
       /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b | grep "New password:" | awk '{print $NF}'
     else
-      echo "{{ elastic_password | default('') }}"
+      # Si no se puede resetear, intentar verificar si ya tiene contraseña
+      echo ""
     fi
   environment:
     ES_PATH_CONF: /etc/elasticsearch
@@ -193,23 +194,40 @@
   changed_when: false
   no_log: true
 
-- name: Guardar la contraseña generada como variable de host
+- name: Verificar si se generó una contraseña
   ansible.builtin.set_fact:
     elastic_password: "{{ elastic_password_result.stdout.strip() }}"
+  run_once: true
+
+- name: Fallback - Generar contraseña manualmente si es necesario
+  ansible.builtin.shell: |
+    # Si no hay contraseña, generar una aleatoria y establecerla
+    if [ -z "{{ elastic_password }}" ]; then
+      NEW_PASS=$(openssl rand -base64 24)
+      echo "y" | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i <<< "${NEW_PASS}" > /dev/null 2>&1
+      echo "${NEW_PASS}"
+    else
+      echo "{{ elastic_password }}"
+    fi
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
+  register: elastic_password_fallback
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
+  changed_when: false
+  no_log: true
+  when: elastic_password == ""
 
-- name: Guardar la contraseña en un archivo local (solo para referencia)
-  ansible.builtin.copy:
-    content: |
-      Contraseña de elastic generada: {{ elastic_password_result.stdout.strip() }}
-      Fecha: {{ ansible_date_time.iso8601 }}
-    dest: "/tmp/elastic_password_{{ ansible_date_time.epoch }}.txt"
-    mode: '0600'
-  run_once: true
-  delegate_to: localhost
-  when: elastic_password_result.stdout.strip() != ""
-
-- name: Exponer contraseña para otros plays
+- name: Establecer contraseña final
   ansible.builtin.set_fact:
-    elastic_password: "{{ elastic_password_result.stdout.strip() }}"
+    elastic_password: "{{ elastic_password_fallback.stdout.strip() if elastic_password == '' else elastic_password }}"
+  run_once: true
+
+# ¡IMPORTANTE! Exponer la contraseña a todos los hosts
+- name: Exponer contraseña para todos los hosts en el inventario
+  ansible.builtin.set_fact:
+    elastic_password: "{{ elastic_password }}"
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['all'] }}"
+  run_once: true

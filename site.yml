@@ -64,6 +64,10 @@
 - name: Desplegar Kibana
   hosts: kibana
   become: yes
+  vars:
+    ansible_become_pass: "{{ local_become_pass }}"
+    # La contraseña se obtiene de hostvars
+    elastic_password: "{{ hostvars[groups['elk'][0]]['elastic_password'] | default('') }}"
   roles:
     - kibana
 
