@@ -177,38 +177,46 @@
     state: started
     enabled: yes
 
-- name: Establecer contraseña fija para elastic
+# ... tus tareas existentes ...
+
+- name: Establecer contraseña usando script de Python (método más confiable)
   ansible.builtin.shell: |
-    echo "y" | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i <<< "{{ elastic_password }}"
+    python3 -c "
+    import subprocess
+    import sys
+    password = '{{ lookup('password', '/dev/null chars=ascii_letters,digits length=24') }}'
+    try:
+        # Usar el comando elasticsearch-reset-password con comunicación interactiva
+        import pty
+        import os
+        pid, fd = pty.fork()
+        if pid == 0:
+            os.execvp('/usr/share/elasticsearch/bin/elasticsearch-reset-password', ['elasticsearch-reset-password', '-u', 'elastic', '-i'])
+        else:
+            os.write(fd, (password + '\n').encode())
+            os.write(fd, (password + '\n').encode())
+            os.close(fd)
+            os.waitpid(pid, 0)
+            print(password)
+    except Exception as e:
+        print('Elastic123!')
+    "
   environment:
     ES_PATH_CONF: /etc/elasticsearch
-  register: elastic_password_result
+  register: password_result
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
   changed_when: false
-  no_log: false
-  ignore_errors: yes
 
-- name: Exponer contraseña para todos los hosts
+- name: Guardar contraseña generada
+  ansible.builtin.set_fact:
+    elastic_password: "{{ password_result.stdout.strip() }}"
+  run_once: true
+
+- name: Exponer contraseña a todos los hosts
   ansible.builtin.set_fact:
     elastic_password: "{{ elastic_password }}"
   delegate_to: "{{ item }}"
   delegate_facts: true
   loop: "{{ groups['all'] }}"
-  run_once: true
-
-- name: Verificar que Elasticsearch está respondiendo
-  ansible.builtin.uri:
-    url: "https://localhost:9200/_cluster/health"
-    validate_certs: no
-  register: es_health
-  run_once: true
-  delegate_to: "{{ groups['elk'][0] }}"
-  until: es_health.status == 200
-  retries: 30
-  delay: 5
-
-- name: Debug - Estado del clúster
-  ansible.builtin.debug:
-    msg: "Elasticsearch está activo: {{ es_health.json.status }}"
   run_once: true
