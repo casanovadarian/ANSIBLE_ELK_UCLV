@@ -133,7 +133,9 @@
     echo "" | /usr/share/elasticsearch/bin/elasticsearch-keystore add -f xpack.security.http.ssl.truststore.secure_password
   environment:
     ES_PATH_CONF: /etc/elasticsearch
-  when: 
+  register: keystore_result
+  changed_when: "'already exists' not in keystore_result.stderr"   # o una condición real de cambio
+  when:
     - inventory_hostname in groups['elk']
     - keystore_file.stat.exists
   notify: Restart Elasticsearch
@@ -223,46 +225,36 @@
     state: started
     enabled: yes
 
-- name: Establecer contraseña usando script de Python (método más confiable)
-  ansible.builtin.shell: |
-    python3 -c "
-    import subprocess
-    import sys
-    password = '{{ lookup('password', '/dev/null chars=ascii_letters,digits length=24') }}'
-    try:
-        # Usar el comando elasticsearch-reset-password con comunicación interactiva
-        import pty
-        import os
-        pid, fd = pty.fork()
-        if pid == 0:
-            os.execvp('/usr/share/elasticsearch/bin/elasticsearch-reset-password', ['elasticsearch-reset-password', '-u', 'elastic', '-i'])
-        else:
-            os.write(fd, (password + '\n').encode())
-            os.write(fd, (password + '\n').encode())
-            os.close(fd)
-            os.waitpid(pid, 0)
-            print(password)
-    except Exception as e:
-        print('Elastic123!')
-    "
+- name: Esperar a que todos los nodos se unan al clúster antes de tocar seguridad
+  ansible.builtin.wait_for:
+    host: "{{ item }}"
+    port: 9300
+    timeout: 120
+  loop: "{{ groups['elk'] }}"
+  run_once: true
+
+#####################################
+# Establecer la contraseña
+#####################################
+
+- name: Restablecer contraseña de elastic (modo automático, sin pty)
+  ansible.builtin.command: >
+    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -a -b
   environment:
     ES_PATH_CONF: /etc/elasticsearch
   register: password_result
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
-  changed_when: false
+  changed_when: true
 
-- name: Guardar contraseña generada
+- name: Extraer contraseña generada
   ansible.builtin.set_fact:
-    elastic_password: "{{ password_result.stdout.strip() }}"
+    elastic_password: "{{ password_result.stdout.split('New value:')[-1] | trim }}"
   run_once: true
 
-- name: Exponer contraseña a todos los hosts
-  ansible.builtin.set_fact:
-    elastic_password: "{{ elastic_password }}"
-  delegate_to: "{{ item }}"
-  delegate_facts: true
-  loop: "{{ groups['all'] }}"
+- name: Mostrar contraseña generada
+  ansible.builtin.debug:
+    msg: "Contraseña de elastic: {{ elastic_password }}"
   run_once: true
 
 - name: Esperar a que el nodo primario responda en el puerto HTTPS (Salud del clúster)
@@ -278,6 +270,22 @@
   retries: 30
   delay: 5
   run_once: true
+
+- name: Esperar a que el clúster esté realmente sano (yellow/green)
+  ansible.builtin.uri:
+    url: "https://{{ groups['elk'][0] }}:9200/_cluster/health"
+    user: elastic
+    password: "{{ elastic_password }}"
+    force_basic_auth: yes
+    validate_certs: no
+  register: cluster_health_check
+  until:
+    - cluster_health_check.status == 200
+    - cluster_health_check.json.status in ['green', 'yellow']
+  retries: 30
+  delay: 5
+  run_once: true
+  delegate_to: "{{ groups['elk'][0] }}"
 
 # ============================================
 # GENERACIÓN DE TOKEN PARA KIBANA
