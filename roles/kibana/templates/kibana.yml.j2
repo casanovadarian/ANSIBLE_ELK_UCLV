@@ -6,8 +6,8 @@ server.name: "{{ inventory_hostname }}"
 # Configuración de Elasticsearch
 elasticsearch.hosts: [{% for host in groups['elk'] %}"https://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:9200"{% if not loop.last %}, {% endif %}{% endfor %}]
 
-# Usar token de enrollamiento para autenticación inicial
-elasticsearch.serviceAccountToken: "{{ kibana_enrollment_token }}"
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "{{ kibana_system_password }}"
 
 # Configuración SSL
 elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/elasticsearch-ca.pem" ]

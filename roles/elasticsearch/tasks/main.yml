@@ -257,20 +257,6 @@
     msg: "Contraseña de elastic: {{ elastic_password }}"
   run_once: true
 
-- name: Esperar a que el nodo primario responda en el puerto HTTPS (Salud del clúster)
-  ansible.builtin.uri:
-    url: "https://{{ groups['elk'][0] }}:9200/_cluster/health"
-    user: elastic
-    password: "{{ elastic_password }}"
-    force_basic_auth: yes
-    validate_certs: no  # Cambiado a 'no' porque el certificado es autofirmado
-    status_code: [200, 401]
-  register: cluster_health
-  until: cluster_health.status is defined
-  retries: 30
-  delay: 5
-  run_once: true
-
 - name: Esperar a que el clúster esté realmente sano (yellow/green)
   ansible.builtin.uri:
     url: "https://{{ groups['elk'][0] }}:9200/_cluster/health"
@@ -288,51 +274,28 @@
   delegate_to: "{{ groups['elk'][0] }}"
 
 # ============================================
-# GENERACIÓN DE TOKEN PARA KIBANA
+# Establecer la contraseña del usuario de servicio de Kibana (kibana_system)
 # ============================================
 
-- name: Generar token de enrollamiento para Kibana
-  ansible.builtin.shell: |
-    /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+- name: Establecer contraseña del usuario de servicio kibana_system
+  ansible.builtin.command: >
+    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system -a -b
   environment:
     ES_PATH_CONF: /etc/elasticsearch
-  register: kibana_token_result
+  register: kibana_password_result
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
-  changed_when: false
-  no_log: false  # Cambiar a true en producción para ocultar el token
+  changed_when: true
 
-- name: Guardar token de Kibana como variable
+- name: Extraer contraseña de kibana_system
   ansible.builtin.set_fact:
-    kibana_enrollment_token: "{{ kibana_token_result.stdout.strip() }}"
+    kibana_system_password: "{{ kibana_password_result.stdout.split('New value:')[-1] | trim }}"
   run_once: true
-  delegate_to: "{{ groups['elk'][0] }}"
 
-- name: Exponer token de Kibana a todos los hosts
+- name: Exponer contraseña de kibana_system a todos los hosts
   ansible.builtin.set_fact:
-    kibana_enrollment_token: "{{ kibana_enrollment_token }}"
+    kibana_system_password: "{{ kibana_system_password }}"
   delegate_to: "{{ item }}"
   delegate_facts: true
   loop: "{{ groups['all'] }}"
   run_once: true
-
-- name: Guardar token en archivo local (seguro)
-  ansible.builtin.copy:
-    content: |
-      KIBANA ENROLLMENT TOKEN
-      ======================
-      Generated: {{ ansible_date_time.iso8601 }}
-      
-      Token: {{ kibana_enrollment_token }}
-      
-      Use this token to enroll Kibana with Elasticsearch.
-    dest: "~/kibana_token_{{ ansible_date_time.epoch }}.txt"
-    mode: '0600'
-  run_once: true
-  delegate_to: localhost
-
-- name: Mostrar token de Kibana (solo para debug)
-  ansible.builtin.debug:
-    msg: "Kibana enrollment token: {{ kibana_enrollment_token }}"
-  run_once: true
-  when: ansible_verbosity >= 2  # Solo mostrar en modo verbose

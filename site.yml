@@ -67,6 +67,7 @@
   vars:
     ansible_become_pass: "{{ hostvars['localhost']['local_become_pass'] | default('') }}"
     elastic_password: "{{ hostvars[groups['elk'][0]]['elastic_password'] | default('') }}"
+    kibana_system_password: "{{ hostvars[groups['elk'][0]]['kibana_system_password'] | default('') }}"
   roles:
     - kibana
 
