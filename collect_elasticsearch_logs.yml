@@ -1,0 +1,128 @@
+---
+# Playbook para recolectar datos de diagnóstico de Elasticsearch
+- name: Collect Elasticsearch diagnostic data
+  hosts: elk
+  become: yes
+  gather_facts: no
+
+  vars:
+    local_base: "./ansible_collected/elasticsearch"
+
+  tasks:
+    - name: Ensure local collection dir exists on controller
+      ansible.builtin.file:
+        path: "{{ local_base }}/{{ inventory_hostname }}"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+      become: no
+
+    - name: Collect systemctl status
+      ansible.builtin.command: systemctl status elasticsearch.service -l --no-pager
+      register: svc_status
+      ignore_errors: yes
+
+    - name: Save systemctl status locally
+      ansible.builtin.copy:
+        content: "{{ svc_status.stdout | default(svc_status.stdout_lines | join('\n')) | default('NO_OUTPUT') }}"
+        dest: "{{ local_base }}/{{ inventory_hostname }}/systemctl_status.txt"
+      delegate_to: localhost
+      become: no
+
+    - name: Collect journalctl for elasticsearch.service
+      ansible.builtin.command: journalctl -xeu elasticsearch.service -n 500 --no-pager
+      register: journal
+      ignore_errors: yes
+
+    - name: Save journalctl locally
+      ansible.builtin.copy:
+        content: "{{ journal.stdout | default(journal.stdout_lines | join('\n')) | default('NO_OUTPUT') }}"
+        dest: "{{ local_base }}/{{ inventory_hostname }}/journalctl.txt"
+      delegate_to: localhost
+      become: no
+
+    - name: List certs and keystore
+      ansible.builtin.command: ls -l /etc/elasticsearch/certs /etc/elasticsearch/certs/transport.p12 /etc/elasticsearch/elasticsearch.keystore || true
+      register: ls_certs
+      ignore_errors: yes
+
+    - name: Save certs listing
+      ansible.builtin.copy:
+        content: "{{ ls_certs.stdout | default('NO_OUTPUT') }}"
+        dest: "{{ local_base }}/{{ inventory_hostname }}/certs_listing.txt"
+      delegate_to: localhost
+      become: no
+
+    - name: Collect perms/stats for certs and keystore
+      ansible.builtin.command: stat -c '%a %U %G %n' /etc/elasticsearch/certs /etc/elasticsearch/certs/transport.p12 /etc/elasticsearch/elasticsearch.keystore || true
+      register: stat_certs
+      ignore_errors: yes
+
+    - name: Save certs perms locally
+      ansible.builtin.copy:
+        content: "{{ stat_certs.stdout | default('NO_OUTPUT') }}"
+        dest: "{{ local_base }}/{{ inventory_hostname }}/certs_perms.txt"
+      delegate_to: localhost
+      become: no
+
+    - name: Slurp elasticsearch.yml if present
+      ansible.builtin.slurp:
+        src: /etc/elasticsearch/elasticsearch.yml
+      register: yaml_slurp
+      ignore_errors: yes
+
+    - name: Save elasticsearch.yml locally
+      ansible.builtin.copy:
+        content: "{{ (yaml_slurp.content | b64decode) if (yaml_slurp is defined and yaml_slurp.content is defined) else 'NOT_FOUND' }}"
+        dest: "{{ local_base }}/{{ inventory_hostname }}/elasticsearch.yml"
+      delegate_to: localhost
+      become: no
+
+    - name: Find elasticsearch log files
+      ansible.builtin.find:
+        paths: /var/log/elasticsearch
+        patterns: '*'
+        file_type: file
+      register: found_logs
+      ignore_errors: yes
+
+    - name: Fetch found log files to controller
+      ansible.builtin.fetch:
+        src: "{{ item.path }}"
+        dest: "{{ local_base }}/{{ inventory_hostname }}/logs/"
+        flat: yes
+      loop: "{{ found_logs.files }}"
+      when: found_logs.matched is defined and found_logs.matched > 0
+      ignore_errors: yes
+
+    - name: Check transport.p12 exists
+      ansible.builtin.stat:
+        path: /etc/elasticsearch/certs/transport.p12
+      register: transport_stat
+      ignore_errors: yes
+
+    - name: Fetch transport.p12 if exists
+      ansible.builtin.fetch:
+        src: /etc/elasticsearch/certs/transport.p12
+        dest: "{{ local_base }}/{{ inventory_hostname }}/"
+        flat: yes
+      when: transport_stat.stat is defined and transport_stat.stat.exists
+      ignore_errors: yes
+
+    - name: Check keystore exists
+      ansible.builtin.stat:
+        path: /etc/elasticsearch/elasticsearch.keystore
+      register: keystore_stat
+      ignore_errors: yes
+
+    - name: Fetch keystore if exists
+      ansible.builtin.fetch:
+        src: /etc/elasticsearch/elasticsearch.keystore
+        dest: "{{ local_base }}/{{ inventory_hostname }}/"
+        flat: yes
+      when: keystore_stat.stat is defined and keystore_stat.stat.exists
+      ignore_errors: yes
+
+    - name: Finished collection for host
+      ansible.builtin.debug:
+        msg: "Collected data under {{ local_base }}/{{ inventory_hostname }}"

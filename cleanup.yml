@@ -251,6 +251,38 @@
     # ============================================
     # 8. (OPCIONAL) DESINSTALAR PAQUETES
     # ============================================
+    - name: Desinstalar paquetes de Elasticsearch
+      ansible.builtin.apt:
+        name: elasticsearch
+        state: absent
+        purge: yes
+      when: 
+        - inventory_hostname in groups['elk'] | default([])
+        - clean_elasticsearch
+        - clean_packages
+      ignore_errors: yes
+
+    - name: Desinstalar paquetes de Kibana
+      ansible.builtin.apt:
+        name: kibana
+        state: absent
+        purge: yes
+      when: 
+        - inventory_hostname in groups['kibana'] | default([])
+        - clean_kibana
+        - clean_packages
+      ignore_errors: yes
+
+    - name: Desinstalar paquetes de Logstash
+      ansible.builtin.apt:
+        name: logstash
+        state: absent
+        purge: yes
+      when: 
+        - inventory_hostname in groups['monitoring'] | default([])
+        - clean_logstash
+        - clean_packages
+      ignore_errors: yes
 
     # ============================================
     # 9. LIMPIAR ARCHIVOS DE CREDENCIALES LOCALES

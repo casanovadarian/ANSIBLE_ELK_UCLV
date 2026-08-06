@@ -14,6 +14,22 @@
     group: elasticsearch
     mode: '0750'
 
+- name: Asegurar que existe /etc/default/elasticsearch
+  file:
+    path: /etc/default/elasticsearch
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Asegurar directorio de certificados
+  file:
+    path: /etc/elasticsearch/certs
+    state: directory
+    owner: root
+    group: elasticsearch
+    mode: '0750'
+
 # ============================================
 # GESTIÓN DE CERTIFICADOS Y KEYSTORE
 # ============================================
@@ -51,6 +67,9 @@
     creates: /etc/elasticsearch/certs/elastic-stack-ca.p12
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
+  when: inventory_hostname == groups['elk'][0]
 
 - name: Generar certificado de transporte (sin contraseña)
   ansible.builtin.command: >
@@ -63,6 +82,8 @@
     creates: /etc/elasticsearch/certs/transport.p12
   run_once: true
   delegate_to: "{{ groups['elk'][0] }}"
+  environment:
+    ES_PATH_CONF: /etc/elasticsearch
 
 - name: Extraer certificado de transporte del primer nodo a la laptop local
   ansible.builtin.fetch:
@@ -197,6 +218,64 @@
 - name: Recargar el demonio de systemd
   ansible.builtin.systemd:
     daemon_reload: yes
+
+# Asegurar directorio de logs antes de arrancar el servicio
+- name: Asegurar que el directorio de logs existe (/var/log/elasticsearch)
+  ansible.builtin.file:
+    path: /var/log/elasticsearch
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0755'
+  when: inventory_hostname in groups['elk']
+
+# Asegurar que exista el archivo de logging necesario (log4j2.properties)
+- name: Comprobar si /etc/elasticsearch/log4j2.properties existe
+  ansible.builtin.stat:
+    path: /etc/elasticsearch/log4j2.properties
+  register: log4j_dest_stat
+  when: inventory_hostname in groups['elk']
+
+- name: Comprobar si existe el archivo de ejemplo en /usr/share
+  ansible.builtin.stat:
+    path: /usr/share/elasticsearch/config/log4j2.properties
+  register: log4j_src_stat
+  when: inventory_hostname in groups['elk']
+
+- name: Copiar log4j2.properties desde el paquete si existe y falta en /etc
+  ansible.builtin.copy:
+    src: /usr/share/elasticsearch/config/log4j2.properties
+    dest: /etc/elasticsearch/log4j2.properties
+    owner: root
+    group: elasticsearch
+    mode: '0644'
+    remote_src: yes
+  when:
+    - inventory_hostname in groups['elk']
+    - log4j_src_stat.stat.exists
+    - not log4j_dest_stat.stat.exists
+
+- name: Crear un log4j2.properties mínimo si no existe plantilla y falta en /etc
+  ansible.builtin.copy:
+    dest: /etc/elasticsearch/log4j2.properties
+    content: |
+      status = error
+      name = PropertiesConfig
+
+      appender.console.type = Console
+      appender.console.name = console
+      appender.console.layout.type = PatternLayout
+      appender.console.layout.pattern = [%d{ISO8601}] [%t] %-5p %c %marker - %m%n
+
+      rootLogger.level = info
+      rootLogger.appenderRef.console.ref = console
+    owner: root
+    group: elasticsearch
+    mode: '0644'
+  when:
+    - inventory_hostname in groups['elk']
+    - not log4j_src_stat.stat.exists
+    - not log4j_dest_stat.stat.exists
 
 - name: Iniciar Elasticsearch en el primer nodo para inicializar el bootstrap
   ansible.builtin.systemd:

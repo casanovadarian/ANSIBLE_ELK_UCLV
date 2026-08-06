@@ -1,0 +1,18 @@
+× elasticsearch.service - Elasticsearch
+     Loaded: loaded (/usr/lib/systemd/system/elasticsearch.service; enabled; preset: enabled)
+    Drop-In: /etc/systemd/system/elasticsearch.service.d
+             └─override.conf
+     Active: failed (Result: exit-code) since Wed 2026-08-05 14:56:36 CDT; 8min ago
+ Invocation: 62069b874e814ad9a9b60766a924a3b4
+       Docs: https://www.elastic.co
+    Process: 167522 ExecStart=/usr/share/elasticsearch/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet (code=exited, status=78)
+   Main PID: 167522 (code=exited, status=78)
+   Mem peak: 57.1M
+        CPU: 1.943s
+
+Aug 05 14:56:36 ES-1 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+Aug 05 14:56:36 ES-1 systemd-entrypoint[167522]: ERROR: Missing logging config file at /etc/elasticsearch/log4j2.properties, with exit code 78
+Aug 05 14:56:36 ES-1 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=78/CONFIG
+Aug 05 14:56:36 ES-1 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+Aug 05 14:56:36 ES-1 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+Aug 05 14:56:36 ES-1 systemd[1]: elasticsearch.service: Consumed 1.943s CPU time, 57.1M memory peak.

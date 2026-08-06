@@ -1,0 +1,42 @@
+# ======================== Elasticsearch Configuration =========================
+cluster.name: uclv-elk-cluster
+node.name: "10.12.1.36"
+node.roles: [ master, data ]
+
+path.data: /mnt/datos
+path.logs: /var/log/elasticsearch
+
+bootstrap.memory_lock: true
+
+# ---------------------------------- Network -----------------------------------
+#network.host: "10.12.1.36"
+
+network.host: 10.12.1.36
+http.port: 9200
+transport.port: 9300
+
+# --------------------------------- Discovery ----------------------------------
+discovery.seed_hosts:
+  - 10.12.1.34
+  - 10.12.1.35
+  - 10.12.1.36
+cluster.initial_master_nodes:
+  - 10.12.1.34
+  - 10.12.1.35
+  - 10.12.1.36
+#----------------------- BEGIN SECURITY CONFIGURATION -----------------------
+xpack.security.enabled: true
+xpack.security.enrollment.enabled: true
+
+# Encriptación entre nodos del clúster (Obligatorio)
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: certs/transport.p12
+xpack.security.transport.ssl.truststore.path: certs/transport.p12
+
+# Encriptación HTTP API (Kibana/Logstash)
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.verification_mode: certificate
+xpack.security.http.ssl.keystore.path: certs/transport.p12
+xpack.security.http.ssl.truststore.path: certs/transport.p12
+#----------------------- END SECURITY CONFIGURATION -------------------------

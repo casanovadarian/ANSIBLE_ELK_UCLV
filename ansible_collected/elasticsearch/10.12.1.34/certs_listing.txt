@@ -1,0 +1,7 @@
+-rw------- 1 root root          3612 Aug  5 14:56 /etc/elasticsearch/certs/transport.p12
+-rw-rw---- 1 root elasticsearch  429 Aug  5 14:56 /etc/elasticsearch/elasticsearch.keystore
+
+/etc/elasticsearch/certs:
+total 8
+-rw------- 1 root root 2688 Aug  5 14:53 elastic-stack-ca.p12
+-rw------- 1 root root 3612 Aug  5 14:56 transport.p12

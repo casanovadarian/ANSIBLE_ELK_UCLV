@@ -1,0 +1,1562 @@
+Jul 24 13:56:31 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 6532.
+Jul 24 13:56:44 ES-3 systemd-entrypoint[33988]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 13:56:45 ES-3 systemd-entrypoint[33988]: Elasticsearch died while starting up, exit code: 1
+Jul 24 13:56:45 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 13:56:45 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 13:56:45 ES-3 systemd[1]: elasticsearch.service: Unit process 34066 (controller) remains running after unit stopped.
+Jul 24 13:56:45 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 6532 and the job result is failed.
+Jul 24 13:56:45 ES-3 systemd[1]: elasticsearch.service: Consumed 27.711s CPU time, 4G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 14:14:51 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 7004.
+Jul 24 14:15:09 ES-3 systemd-entrypoint[35098]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 14:15:09 ES-3 systemd-entrypoint[35098]: Elasticsearch died while starting up, exit code: 1
+Jul 24 14:15:09 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 14:15:09 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 14:15:09 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 7004 and the job result is failed.
+Jul 24 14:15:09 ES-3 systemd[1]: elasticsearch.service: Consumed 36.627s CPU time, 4G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 14:20:57 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 7476.
+Jul 24 14:21:14 ES-3 systemd-entrypoint[36319]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 14:21:14 ES-3 systemd-entrypoint[36319]: Elasticsearch died while starting up, exit code: 1
+Jul 24 14:21:14 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 14:21:14 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 14:21:14 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 7476 and the job result is failed.
+Jul 24 14:21:14 ES-3 systemd[1]: elasticsearch.service: Consumed 34.955s CPU time, 4.1G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 14:25:44 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 7757.
+Jul 24 14:26:01 ES-3 systemd-entrypoint[37513]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 14:26:02 ES-3 systemd-entrypoint[37513]: Elasticsearch died while starting up, exit code: 1
+Jul 24 14:26:02 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 14:26:02 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 14:26:02 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 7757 and the job result is failed.
+Jul 24 14:26:02 ES-3 systemd[1]: elasticsearch.service: Consumed 37.155s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 14:31:46 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 8134.
+Jul 24 14:32:03 ES-3 systemd-entrypoint[38716]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 14:32:03 ES-3 systemd-entrypoint[38716]: Elasticsearch died while starting up, exit code: 1
+Jul 24 14:32:03 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 14:32:03 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 14:32:03 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 8134 and the job result is failed.
+Jul 24 14:32:03 ES-3 systemd[1]: elasticsearch.service: Consumed 37.591s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 15:06:20 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 8511.
+Jul 24 15:06:36 ES-3 systemd-entrypoint[39989]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 15:06:37 ES-3 systemd-entrypoint[39989]: Elasticsearch died while starting up, exit code: 1
+Jul 24 15:06:37 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 15:06:37 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 15:06:37 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 8511 and the job result is failed.
+Jul 24 15:06:37 ES-3 systemd[1]: elasticsearch.service: Consumed 35.965s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 15:10:51 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 8792.
+Jul 24 15:11:08 ES-3 systemd-entrypoint[41232]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 15:11:08 ES-3 systemd-entrypoint[41232]: Elasticsearch died while starting up, exit code: 1
+Jul 24 15:11:08 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 15:11:08 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 15:11:08 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 8792 and the job result is failed.
+Jul 24 15:11:08 ES-3 systemd[1]: elasticsearch.service: Consumed 37.244s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 24 15:14:42 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 9073.
+Jul 24 15:14:58 ES-3 systemd-entrypoint[42521]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 24 15:14:59 ES-3 systemd-entrypoint[42521]: Elasticsearch died while starting up, exit code: 1
+Jul 24 15:14:59 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 24 15:14:59 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 24 15:14:59 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 9073 and the job result is failed.
+Jul 24 15:14:59 ES-3 systemd[1]: elasticsearch.service: Consumed 36.682s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 27 15:10:15 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 12443.
+Jul 27 15:10:32 ES-3 systemd-entrypoint[53533]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 27 15:10:32 ES-3 systemd-entrypoint[53533]: Elasticsearch died while starting up, exit code: 1
+Jul 27 15:10:32 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 27 15:10:32 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 27 15:10:32 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 12443 and the job result is failed.
+Jul 27 15:10:32 ES-3 systemd[1]: elasticsearch.service: Consumed 35.447s CPU time, 4.1G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 27 15:35:33 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 14334.
+Jul 27 15:35:50 ES-3 systemd-entrypoint[58189]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 27 15:35:50 ES-3 systemd-entrypoint[58189]: Elasticsearch died while starting up, exit code: 1
+Jul 27 15:35:50 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 27 15:35:50 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 27 15:35:50 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 14334 and the job result is failed.
+Jul 27 15:35:50 ES-3 systemd[1]: elasticsearch.service: Consumed 36.249s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 27 15:46:20 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 14902.
+Jul 27 15:46:37 ES-3 systemd-entrypoint[59585]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 27 15:46:38 ES-3 systemd-entrypoint[59585]: Elasticsearch died while starting up, exit code: 1
+Jul 27 15:46:38 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 27 15:46:38 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 27 15:46:38 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 14902 and the job result is failed.
+Jul 27 15:46:38 ES-3 systemd[1]: elasticsearch.service: Consumed 37.115s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 28 12:26:26 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 16122.
+Jul 28 12:26:48 ES-3 systemd-entrypoint[63385]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 28 12:26:48 ES-3 systemd-entrypoint[63385]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 28 12:26:48 ES-3 systemd-entrypoint[63385]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 28 12:26:48 ES-3 systemd-entrypoint[63385]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 28 12:26:57 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 16122.
+Jul 28 12:39:25 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 16499.
+Jul 28 12:39:28 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 28 12:39:28 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 16499 and the job result is done.
+Jul 28 12:39:28 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 22.157s CPU time, 4.3G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 28 12:39:59 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 16500.
+Jul 28 12:40:20 ES-3 systemd-entrypoint[64865]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 28 12:40:20 ES-3 systemd-entrypoint[64865]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 28 12:40:20 ES-3 systemd-entrypoint[64865]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 28 12:40:20 ES-3 systemd-entrypoint[64865]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 28 12:40:29 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 16500.
+Jul 28 12:56:53 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 16877.
+Jul 28 12:56:55 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 28 12:56:55 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 16877 and the job result is done.
+Jul 28 12:56:55 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 24.134s CPU time, 4.4G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 28 12:56:57 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 16878.
+Jul 28 12:57:17 ES-3 systemd-entrypoint[66343]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 28 12:57:17 ES-3 systemd-entrypoint[66343]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 28 12:57:17 ES-3 systemd-entrypoint[66343]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 28 12:57:17 ES-3 systemd-entrypoint[66343]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 28 12:57:55 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 16878.
+Jul 28 13:15:02 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 17350.
+Jul 28 13:15:13 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 28 13:15:13 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 17350 and the job result is done.
+Jul 28 13:15:13 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 21.588s CPU time, 4.3G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 28 13:18:52 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 17351.
+Jul 28 13:19:13 ES-3 systemd-entrypoint[67811]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 28 13:19:13 ES-3 systemd-entrypoint[67811]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 28 13:19:13 ES-3 systemd-entrypoint[67811]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 28 13:19:13 ES-3 systemd-entrypoint[67811]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 28 13:19:51 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 17351.
+Jul 28 13:21:46 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 17728.
+Jul 28 13:21:49 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 28 13:21:49 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 17728 and the job result is done.
+Jul 28 13:21:49 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 1.019s CPU time, 4.3G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 28 13:21:49 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 17728.
+Jul 28 13:22:10 ES-3 systemd-entrypoint[69180]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 28 13:22:10 ES-3 systemd-entrypoint[69180]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 28 13:22:10 ES-3 systemd-entrypoint[69180]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 28 13:22:10 ES-3 systemd-entrypoint[69180]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 28 13:22:48 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 17728.
+Jul 30 14:17:59 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 25073.
+Jul 30 14:18:02 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 30 14:18:02 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 25073 and the job result is done.
+Jul 30 14:18:02 ES-3 systemd[1]: elasticsearch.service: Consumed 20min 16.825s CPU time, 4.5G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 30 14:18:02 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 25073.
+Jul 30 14:18:18 ES-3 systemd-entrypoint[94869]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/uclv-elk-cluster.log
+Jul 30 14:18:18 ES-3 systemd-entrypoint[94869]: Elasticsearch died while starting up, exit code: 1
+Jul 30 14:18:18 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Jul 30 14:18:18 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Jul 30 14:18:18 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 25073 and the job result is failed.
+Jul 30 14:18:18 ES-3 systemd[1]: elasticsearch.service: Consumed 40.518s CPU time, 4.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 30 14:38:35 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 25732.
+Jul 30 14:38:56 ES-3 systemd-entrypoint[97900]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 30 14:38:56 ES-3 systemd-entrypoint[97900]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 30 14:38:56 ES-3 systemd-entrypoint[97900]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 30 14:38:56 ES-3 systemd-entrypoint[97900]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 30 14:39:05 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 25732.
+Jul 30 14:44:50 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 26109.
+Jul 30 14:44:53 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 30 14:44:53 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 26109 and the job result is done.
+Jul 30 14:44:53 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 14.393s CPU time, 4.4G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 30 14:44:53 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 26109.
+Jul 30 14:45:14 ES-3 systemd-entrypoint[99632]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 30 14:45:14 ES-3 systemd-entrypoint[99632]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 30 14:45:14 ES-3 systemd-entrypoint[99632]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 30 14:45:14 ES-3 systemd-entrypoint[99632]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 30 14:45:24 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 26109.
+Jul 30 14:49:56 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 26390.
+Jul 30 14:49:58 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 30 14:49:58 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 26390 and the job result is done.
+Jul 30 14:49:58 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 12.485s CPU time, 4.4G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 30 14:49:58 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 26390.
+Jul 30 14:50:20 ES-3 systemd-entrypoint[101389]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 30 14:50:20 ES-3 systemd-entrypoint[101389]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 30 14:50:20 ES-3 systemd-entrypoint[101389]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 30 14:50:20 ES-3 systemd-entrypoint[101389]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 30 14:50:28 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 26390.
+Jul 30 14:54:51 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 26671.
+Jul 30 14:54:54 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Jul 30 14:54:54 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 26671 and the job result is done.
+Jul 30 14:54:54 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 10.901s CPU time, 4.4G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Jul 30 14:54:54 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 26671.
+Jul 30 14:55:15 ES-3 systemd-entrypoint[103126]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Jul 30 14:55:15 ES-3 systemd-entrypoint[103126]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Jul 30 14:55:15 ES-3 systemd-entrypoint[103126]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Jul 30 14:55:15 ES-3 systemd-entrypoint[103126]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Jul 30 14:55:52 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 26671.
+Aug 04 13:27:40 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 31349.
+Aug 04 13:27:44 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 04 13:27:44 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 31349 and the job result is done.
+Aug 04 13:27:44 ES-3 systemd[1]: elasticsearch.service: Consumed 1h 34min 19.960s CPU time, 5.2G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 04 13:27:44 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 31349.
+Aug 04 13:28:06 ES-3 systemd-entrypoint[123418]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 04 13:28:06 ES-3 systemd-entrypoint[123418]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 04 13:28:06 ES-3 systemd-entrypoint[123418]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 04 13:28:06 ES-3 systemd-entrypoint[123418]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 04 13:28:15 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 31349.
+Aug 04 13:57:05 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 32231.
+Aug 04 13:57:11 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 04 13:57:11 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 32231 and the job result is done.
+Aug 04 13:57:11 ES-3 systemd[1]: elasticsearch.service: Consumed 2min 31.823s CPU time, 4.6G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 04 13:57:11 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 32231.
+Aug 04 13:57:14 ES-3 systemd-entrypoint[125800]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 04 13:57:37 ES-3 systemd-entrypoint[125800]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 04 13:57:37 ES-3 systemd-entrypoint[125800]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 04 13:57:37 ES-3 systemd-entrypoint[125800]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 04 13:57:37 ES-3 systemd-entrypoint[125800]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 04 13:57:46 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 32231.
+Aug 04 14:14:00 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 32799.
+Aug 04 14:14:04 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 04 14:14:04 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 32799 and the job result is done.
+Aug 04 14:14:04 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 55.161s CPU time, 4.7G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 04 14:14:04 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 32799.
+Aug 04 14:14:07 ES-3 systemd-entrypoint[127620]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 04 14:14:27 ES-3 systemd-entrypoint[127620]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 04 14:14:27 ES-3 systemd-entrypoint[127620]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 04 14:14:27 ES-3 systemd-entrypoint[127620]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 04 14:14:27 ES-3 systemd-entrypoint[127620]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 04 14:14:36 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 32799.
+Aug 04 14:30:15 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 33939.
+Aug 04 14:30:22 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 04 14:30:22 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 33939 and the job result is done.
+Aug 04 14:30:22 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 59.812s CPU time, 4.7G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 04 14:30:22 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 33939.
+Aug 04 14:30:25 ES-3 systemd-entrypoint[129849]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 04 14:30:45 ES-3 systemd-entrypoint[129849]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 04 14:30:45 ES-3 systemd-entrypoint[129849]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 04 14:30:45 ES-3 systemd-entrypoint[129849]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 04 14:30:45 ES-3 systemd-entrypoint[129849]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 04 14:31:23 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 33939.
+Aug 04 14:48:41 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 34602.
+Aug 04 14:48:45 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 04 14:48:45 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 34602 and the job result is done.
+Aug 04 14:48:45 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 55.922s CPU time, 4.5G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 04 14:48:45 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 34602.
+Aug 04 14:48:48 ES-3 systemd-entrypoint[131720]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 04 14:49:08 ES-3 systemd-entrypoint[131720]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 04 14:49:08 ES-3 systemd-entrypoint[131720]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 04 14:49:08 ES-3 systemd-entrypoint[131720]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 04 14:49:08 ES-3 systemd-entrypoint[131720]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 04 14:49:19 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 34602.
+Aug 04 15:03:38 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 34979.
+Aug 04 15:03:42 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 04 15:03:42 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 34979 and the job result is done.
+Aug 04 15:03:42 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 49.559s CPU time, 4.6G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 04 15:03:42 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 34979.
+Aug 04 15:03:45 ES-3 systemd-entrypoint[133519]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 04 15:04:04 ES-3 systemd-entrypoint[133519]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 04 15:04:04 ES-3 systemd-entrypoint[133519]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 04 15:04:04 ES-3 systemd-entrypoint[133519]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 04 15:04:04 ES-3 systemd-entrypoint[133519]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 04 15:04:14 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 34979.
+Aug 05 12:15:35 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 36581.
+Aug 05 12:16:09 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 12:16:09 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 36581 and the job result is done.
+Aug 05 12:16:09 ES-3 systemd[1]: elasticsearch.service: Consumed 28min 32.701s CPU time, 5G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 12:16:09 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 36581.
+Aug 05 12:16:12 ES-3 systemd-entrypoint[138308]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 12:16:32 ES-3 systemd-entrypoint[138308]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 12:16:32 ES-3 systemd-entrypoint[138308]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 12:16:32 ES-3 systemd-entrypoint[138308]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 12:16:32 ES-3 systemd-entrypoint[138308]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 12:16:41 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 36581.
+Aug 05 12:33:27 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 37053.
+Aug 05 12:34:01 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 12:34:01 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 37053 and the job result is done.
+Aug 05 12:34:01 ES-3 systemd[1]: elasticsearch.service: Consumed 2min 36.271s CPU time, 4.7G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 12:34:01 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 37053.
+Aug 05 12:34:04 ES-3 systemd-entrypoint[140151]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 12:34:25 ES-3 systemd-entrypoint[140151]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 12:34:25 ES-3 systemd-entrypoint[140151]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 12:34:25 ES-3 systemd-entrypoint[140151]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 12:34:25 ES-3 systemd-entrypoint[140151]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 12:34:36 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 37053.
+Aug 05 13:04:17 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 37430.
+Aug 05 13:04:20 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 13:04:20 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 37430 and the job result is done.
+Aug 05 13:04:20 ES-3 systemd[1]: elasticsearch.service: Consumed 2min 11.618s CPU time, 4.6G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 13:04:20 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 37430.
+Aug 05 13:04:23 ES-3 systemd-entrypoint[141972]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 13:04:43 ES-3 systemd-entrypoint[141972]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 13:04:43 ES-3 systemd-entrypoint[141972]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 13:04:43 ES-3 systemd-entrypoint[141972]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 13:04:43 ES-3 systemd-entrypoint[141972]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 13:04:52 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 37430.
+Aug 05 13:09:08 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 37711.
+Aug 05 13:09:12 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 13:09:12 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 37711 and the job result is done.
+Aug 05 13:09:12 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 43.899s CPU time, 4.7G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 13:09:12 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 37711.
+Aug 05 13:09:14 ES-3 systemd-entrypoint[143768]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 13:09:35 ES-3 systemd-entrypoint[143768]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 13:09:35 ES-3 systemd-entrypoint[143768]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 13:09:35 ES-3 systemd-entrypoint[143768]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 13:09:35 ES-3 systemd-entrypoint[143768]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 13:09:44 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 37711.
+Aug 05 13:29:01 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38088.
+Aug 05 13:29:04 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 13:29:04 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 38088 and the job result is done.
+Aug 05 13:29:04 ES-3 systemd[1]: elasticsearch.service: Consumed 2min 1.216s CPU time, 4.7G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 13:29:04 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38088.
+Aug 05 13:29:07 ES-3 systemd-entrypoint[145611]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 13:29:27 ES-3 systemd-entrypoint[145611]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 13:29:27 ES-3 systemd-entrypoint[145611]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 13:29:27 ES-3 systemd-entrypoint[145611]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 13:29:27 ES-3 systemd-entrypoint[145611]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 13:30:05 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 38088.
+Aug 05 13:33:20 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38369.
+Aug 05 13:33:53 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 13:33:53 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 38369 and the job result is done.
+Aug 05 13:33:53 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 19.887s CPU time, 4.5G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 13:33:53 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38369.
+Aug 05 13:33:55 ES-3 systemd-entrypoint[147367]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 13:34:16 ES-3 systemd-entrypoint[147367]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 13:34:16 ES-3 systemd-entrypoint[147367]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 13:34:16 ES-3 systemd-entrypoint[147367]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 13:34:16 ES-3 systemd-entrypoint[147367]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 13:34:25 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 38369.
+Aug 05 13:46:57 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38746.
+Aug 05 13:47:01 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 13:47:01 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 38746 and the job result is done.
+Aug 05 13:47:01 ES-3 systemd[1]: elasticsearch.service: Consumed 1min 41.280s CPU time, 4.5G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 13:47:01 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38746.
+Aug 05 13:47:03 ES-3 systemd-entrypoint[149176]: WARNING: Unknown module: org.apache.arrow.memory.core specified to --add-opens
+Aug 05 13:47:24 ES-3 systemd-entrypoint[149176]: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+Aug 05 13:47:24 ES-3 systemd-entrypoint[149176]: WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/usr/share/elasticsearch/modules/x-pack-otel-data/protobuf-java-4.32.0.jar)
+Aug 05 13:47:24 ES-3 systemd-entrypoint[149176]: WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+Aug 05 13:47:24 ES-3 systemd-entrypoint[149176]: WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Aug 05 13:47:33 ES-3 systemd[1]: Started elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has finished successfully
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished successfully.
+░░ 
+░░ The job identifier is 38746.
+Aug 05 14:23:34 ES-3 systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 38936.
+Aug 05 14:23:38 ES-3 systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Aug 05 14:23:38 ES-3 systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 38936 and the job result is done.
+Aug 05 14:23:38 ES-3 systemd[1]: elasticsearch.service: Consumed 2min 13.100s CPU time, 4.5G memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Aug 05 14:56:38 ES-3 systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 40153.
+Aug 05 14:56:38 ES-3 systemd-entrypoint[156591]: ERROR: Missing logging config file at /etc/elasticsearch/log4j2.properties, with exit code 78
+Aug 05 14:56:38 ES-3 systemd[1]: elasticsearch.service: Main process exited, code=exited, status=78/CONFIG
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 78.
+Aug 05 14:56:38 ES-3 systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Aug 05 14:56:38 ES-3 systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 40153 and the job result is failed.
+Aug 05 14:56:38 ES-3 systemd[1]: elasticsearch.service: Consumed 2.049s CPU time, 60M memory peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
