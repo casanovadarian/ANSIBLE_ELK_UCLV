@@ -1,339 +1,179 @@
 ---
-# cleanup.yml
-# Playbook para limpiar completamente Elasticsearch, Kibana y Logstash
-
-- name: Limpieza completa del stack ELK
-  hosts: elk,kibana,monitoring  # Incluir monitoring donde está Logstash
-  become: yes
-  gather_facts: yes
+- name: Limpiar completamente Elastic Stack
+  hosts: elasticsearch
+  become: true
+  gather_facts: true
 
   vars:
-    # Variables para controlar qué limpiar
-    clean_elasticsearch: true
-    clean_kibana: true
-    clean_logstash: true
-    clean_data: true
-    clean_logs: true
-    clean_config: true
-    clean_certs: true
-    clean_packages: false
+    purge_packages: false
+
+    elastic_services:
+      - elasticsearch
+      - kibana
+      - logstash
+
+    elastic_packages:
+      - elasticsearch
+      - kibana
+      - logstash
+
+    elastic_directories:
+      - /etc/elasticsearch
+      - /etc/kibana
+      - /etc/logstash
+
+      - /var/lib/elasticsearch
+      - /var/lib/kibana
+      - /var/lib/logstash
+
+      - /var/log/elasticsearch
+      - /var/log/kibana
+      - /var/log/logstash
+
+      # Si utilizas un path.data personalizado
+      - /mnt/datos
+
+      # Directorios de ejecución
+      - /var/run/elasticsearch
+      - /var/run/kibana
+      - /var/run/logstash
+
+      # Directorios de instalación
+      - /usr/share/elasticsearch
+      - /usr/share/kibana
+      - /usr/share/logstash
+
+    temporary_files:
+      - /tmp/http.p12
+      - /tmp/transport.p12
+      - /tmp/http_ca.crt
+      - /tmp/elastic-stack-ca.p12
+
+    repositories:
+      - /etc/apt/sources.list.d/elastic.list
+
+    gpg_keys:
+      - /usr/share/keyrings/elasticsearch-keyring.gpg
 
   tasks:
-    # ============================================
-    # 1. DETENER SERVICIOS
-    # ============================================
-    - name: Detener servicios de Elasticsearch
+
+  ####################################################
+  # Detener servicios
+  ####################################################
+
+    - name: Detener servicios
       ansible.builtin.systemd:
-        name: elasticsearch
+        name: "{{ item }}"
         state: stopped
-        enabled: no
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-      ignore_errors: yes
-      register: stop_elasticsearch
+      loop: "{{ elastic_services }}"
+      ignore_errors: true
 
-    - name: Detener servicios de Kibana
+    - name: Deshabilitar servicios
       ansible.builtin.systemd:
-        name: kibana
-        state: stopped
-        enabled: no
-      when: 
-        - inventory_hostname in groups['kibana'] | default([])
-        - clean_kibana
-      ignore_errors: yes
-      register: stop_kibana
+        name: "{{ item }}"
+        enabled: false
+      loop: "{{ elastic_services }}"
+      ignore_errors: true
 
-#    - name: Detener servicios de Logstash
-#      ansible.builtin.systemd:
-#        name: logstash
-#        state: stopped
-#        enabled: no
-#      when: 
-#        - inventory_hostname in groups['monitoring'] | default([])
-#        - clean_logstash
-#      ignore_errors: yes
-#      register: stop_logstash
+  ####################################################
+  # Matar procesos residuales
+  ####################################################
 
-    - name: Matar procesos residuales (usando killall si está disponible)
+    - name: Finalizar procesos restantes
       ansible.builtin.shell: |
-        killall elasticsearch 2>/dev/null || true
-        killall kibana 2>/dev/null || true
-        killall logstash 2>/dev/null || true
-        pkill -f "elasticsearch" 2>/dev/null || true
-        pkill -f "kibana" 2>/dev/null || true
-        pkill -f "logstash" 2>/dev/null || true
-      when: clean_elasticsearch or clean_kibana or clean_logstash
-      ignore_errors: yes
+        pkill -9 -f {{ item }} || true
+      loop: "{{ elastic_services }}"
       changed_when: false
 
-    # ============================================
-    # 2. LIMPIAR ARCHIVOS DE DATOS
-    # ============================================
-    - name: Eliminar directorios de datos de Elasticsearch
+  ####################################################
+  # Eliminar archivos temporales
+  ####################################################
+
+    - name: Eliminar archivos temporales
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
-      loop:
-        - /mnt/datos
-        - /var/lib/elasticsearch
-        - /usr/share/elasticsearch/data
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-        - clean_data
-      ignore_errors: yes
+      loop: "{{ temporary_files }}"
 
-    - name: Eliminar directorios de datos de Kibana
+  ####################################################
+  # Eliminar directorios
+  ####################################################
+
+    - name: Eliminar directorios
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
-      loop:
-        - /var/lib/kibana
-        - /usr/share/kibana/data
-      when: 
-        - inventory_hostname in groups['kibana'] | default([])
-        - clean_kibana
-        - clean_data
-      ignore_errors: yes
+      loop: "{{ elastic_directories }}"
 
-    - name: Eliminar directorios de datos de Logstash
+  ####################################################
+  # Eliminar repositorios
+  ####################################################
+
+    - name: Eliminar repositorios de Elastic
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
-      loop:
-        - /var/lib/logstash
-        - /usr/share/logstash/data
-      when: 
-        - inventory_hostname in groups['monitoring'] | default([])
-        - clean_logstash
-        - clean_data
-      ignore_errors: yes
+      loop: "{{ repositories }}"
 
-    # ============================================
-    # 3. LIMPIAR ARCHIVOS DE LOGS
-    # ============================================
-    - name: Eliminar logs de Elasticsearch
+    - name: Eliminar llaves GPG
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
-      loop:
-        - /var/log/elasticsearch
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-        - clean_logs
-      ignore_errors: yes
+      loop: "{{ gpg_keys }}"
 
-    - name: Eliminar logs de Kibana
-      ansible.builtin.file:
-        path: /var/log/kibana
+  ####################################################
+  # Desinstalar paquetes
+  ####################################################
+
+    - name: Eliminar paquetes
+      ansible.builtin.apt:
+        name: "{{ elastic_packages }}"
         state: absent
-      when: 
-        - inventory_hostname in groups['kibana'] | default([])
-        - clean_kibana
-        - clean_logs
-      ignore_errors: yes
+        purge: yes
+      when: purge_packages
 
-    - name: Eliminar logs de Logstash
-      ansible.builtin.file:
-        path: /var/log/logstash
+    - name: Eliminar dependencias no utilizadas
+      ansible.builtin.apt:
+        autoremove: yes
+        purge: yes
+      when: purge_packages
+
+    - name: Limpiar caché de apt
+      ansible.builtin.apt:
+        autoclean: yes
+      when: purge_packages
+
+  ####################################################
+  # Eliminar usuarios
+  ####################################################
+
+    - name: Eliminar usuario elasticsearch
+      ansible.builtin.user:
+        name: elasticsearch
         state: absent
-      when: 
-        - inventory_hostname in groups['monitoring'] | default([])
-        - clean_logstash
-        - clean_logs
-      ignore_errors: yes
+        remove: yes
+      ignore_errors: true
 
-    # ============================================
-    # 4. LIMPIAR ARCHIVOS DE CONFIGURACIÓN
-    # ============================================
-    - name: Eliminar configuración de Elasticsearch
-      ansible.builtin.file:
-        path: "{{ item }}"
+    - name: Eliminar grupo elasticsearch
+      ansible.builtin.group:
+        name: elasticsearch
         state: absent
-      loop:
-        - /etc/elasticsearch
-        - /etc/default/elasticsearch
-        - /etc/systemd/system/elasticsearch.service.d
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-        - clean_config
-      ignore_errors: yes
+      ignore_errors: true
 
-    - name: Eliminar configuración de Kibana
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - /etc/kibana
-        - /etc/default/kibana
-      when: 
-        - inventory_hostname in groups['kibana'] | default([])
-        - clean_kibana
-        - clean_config
-      ignore_errors: yes
+  ####################################################
+  # Recargar systemd
+  ####################################################
 
-    - name: Eliminar configuración de Logstash
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - /etc/logstash
-        - /etc/default/logstash
-      when: 
-        - inventory_hostname in groups['monitoring'] | default([])
-        - clean_logstash
-        - clean_config
-      ignore_errors: yes
-
-    # ============================================
-    # 5. LIMPIAR CERTIFICADOS
-    # ============================================
-    - name: Eliminar certificados de Elasticsearch
-      ansible.builtin.file:
-        path: /etc/elasticsearch/certs
-        state: absent
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-        - clean_certs
-      ignore_errors: yes
-
-    - name: Eliminar certificados de Kibana
-      ansible.builtin.file:
-        path: /etc/kibana/certs
-        state: absent
-      when: 
-        - inventory_hostname in groups['kibana'] | default([])
-        - clean_kibana
-        - clean_certs
-      ignore_errors: yes
-
-    - name: Eliminar certificados de Logstash
-      ansible.builtin.file:
-        path: /etc/logstash/certs
-        state: absent
-      when: 
-        - inventory_hostname in groups['monitoring'] | default([])
-        - clean_logstash
-        - clean_certs
-      ignore_errors: yes
-
-    - name: Eliminar certificados temporales en nodos
-      ansible.builtin.file:
-        path: /tmp/transport.p12
-        state: absent
-      when: inventory_hostname in groups['elk'] | default([])
-      ignore_errors: yes
-
-    # ============================================
-    # 6. LIMPIAR KEYSTORE DE ELASTICSEARCH
-    # ============================================
-    - name: Eliminar keystore de Elasticsearch
-      ansible.builtin.file:
-        path: /etc/elasticsearch/elasticsearch.keystore
-        state: absent
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-      ignore_errors: yes
-
-    # ============================================
-    # 7. RECARGAR SYSTEMD
-    # ============================================
     - name: Recargar systemd
       ansible.builtin.systemd:
         daemon_reload: yes
-      when: clean_elasticsearch or clean_kibana or clean_logstash
 
-    # ============================================
-    # 8. (OPCIONAL) DESINSTALAR PAQUETES
-    # ============================================
-    - name: Desinstalar paquetes de Elasticsearch
+    - name: Limpiar estado de servicios fallidos
+      ansible.builtin.command:
+        cmd: systemctl reset-failed
+      changed_when: false
+
+    - name: Actualizar caché de apt
       ansible.builtin.apt:
-        name: elasticsearch
-        state: absent
-        purge: yes
-      when: 
-        - inventory_hostname in groups['elk'] | default([])
-        - clean_elasticsearch
-        - clean_packages
-      ignore_errors: yes
-
-    - name: Desinstalar paquetes de Kibana
-      ansible.builtin.apt:
-        name: kibana
-        state: absent
-        purge: yes
-      when: 
-        - inventory_hostname in groups['kibana'] | default([])
-        - clean_kibana
-        - clean_packages
-      ignore_errors: yes
-
-    - name: Desinstalar paquetes de Logstash
-      ansible.builtin.apt:
-        name: logstash
-        state: absent
-        purge: yes
-      when: 
-        - inventory_hostname in groups['monitoring'] | default([])
-        - clean_logstash
-        - clean_packages
-      ignore_errors: yes
-
-    # ============================================
-    # 9. LIMPIAR ARCHIVOS DE CREDENCIALES LOCALES
-    # ============================================
-    - name: Eliminar archivos de credenciales locales
-      ansible.builtin.find:
-        paths: "{{ ansible_env.HOME }}"
-        patterns: "elastic_credentials_*.txt,kibana_token_*.txt,elastic_password_*.txt"
-        file_type: file
-      register: credentials_files
-      run_once: true
-      delegate_to: localhost
-      become: false  # No usar sudo para archivos locales
-
-    - name: Eliminar archivos de credenciales encontrados
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: absent
-      loop: "{{ credentials_files.files }}"
-      run_once: true
-      delegate_to: localhost
-      become: false
-      when: credentials_files.files | length > 0
-
-    # ============================================
-    # 10. RESULTADO FINAL
-    # ============================================
-    - name: Mostrar resumen de limpieza
-      ansible.builtin.debug:
-        msg: |
-          ========================================
-          ✅ LIMPIEZA COMPLETA REALIZADA
-          ========================================
-          Nodo: {{ inventory_hostname }}
-          Funciones: {{ group_names | join(', ') }}
-          
-          Servicios detenidos:
-          {% if inventory_hostname in (groups['elk'] | default([])) %}
-            - Elasticsearch: ✅
-          {% endif %}
-          {% if inventory_hostname in (groups['kibana'] | default([])) %}
-            - Kibana: ✅
-          {% endif %}
-          {% if inventory_hostname in (groups['monitoring'] | default([])) %}
-            - Logstash: ✅
-          {% endif %}
-          
-          Directorios eliminados:
-          - Datos: {{ '✅' if clean_data else '⏭️' }}
-          - Logs: {{ '✅' if clean_logs else '⏭️' }}
-          - Configuración: {{ '✅' if clean_config else '⏭️' }}
-          - Certificados: {{ '✅' if clean_certs else '⏭️' }}
-          ========================================
-      run_once: true
+        update_cache: yes
+      when: purge_packages
