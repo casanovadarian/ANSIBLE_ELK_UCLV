@@ -99,7 +99,7 @@
     dest: /etc/elasticsearch/certs/transport.p12
     owner: elasticsearch
     group: elasticsearch
-    mode: '0600'
+    mode: '0640'  # Cambiado de 0600 a 0640 para permitir lectura por elasticsearch
   when: inventory_hostname in groups['elk'] and inventory_hostname != groups['elk'][0]
 
 - name: Verificar que todos los nodos tengan el certificado
@@ -114,10 +114,19 @@
     dest: /etc/elasticsearch/certs/transport.p12
     owner: elasticsearch
     group: elasticsearch
-    mode: '0600'
+    mode: '0640'  # Cambiado de 0600 a 0640
   when: 
     - inventory_hostname in groups['elk']
     - not transport_cert_exists.stat.exists
+
+# NUEVA TAREA: Asegurar permisos correctos del certificado en TODOS los nodos
+- name: Asegurar permisos correctos del certificado transport.p12 en todos los nodos
+  ansible.builtin.file:
+    path: /etc/elasticsearch/certs/transport.p12
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0640'
+  when: inventory_hostname in groups['elk']
 
 # ============================================
 # CONFIGURACIÓN DEL KEYSTORE
@@ -155,7 +164,7 @@
   environment:
     ES_PATH_CONF: /etc/elasticsearch
   register: keystore_result
-  changed_when: "'already exists' not in keystore_result.stderr"   # o una condición real de cambio
+  changed_when: "'already exists' not in keystore_result.stderr"
   when:
     - inventory_hostname in groups['elk']
     - keystore_file.stat.exists
@@ -174,6 +183,28 @@
 # ============================================
 # VERIFICACIÓN DE CERTIFICADOS Y KEYSTORE
 # ============================================
+
+# NUEVA TAREA: Asegurar permisos correctos del certificado transport.p12 en TODOS los nodos
+- name: Asegurar permisos correctos del certificado transport.p12 en todos los nodos
+  ansible.builtin.file:
+    path: /etc/elasticsearch/certs/transport.p12
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0640'
+  when: 
+    - inventory_hostname in groups['elk']
+    - transport_cert_exists.stat.exists | default(false)
+
+# NUEVA TAREA: Asegurar permisos correctos del certificado CA solo en el primer nodo
+- name: Asegurar permisos correctos del certificado CA en el primer nodo
+  ansible.builtin.file:
+    path: /etc/elasticsearch/certs/elastic-stack-ca.p12
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0640'
+  when: 
+    - inventory_hostname == groups['elk'][0]
+    - ca_cert.stat.exists | default(false)
 
 - name: Verificar que el certificado es legible con contraseña vacía
   ansible.builtin.shell: |
