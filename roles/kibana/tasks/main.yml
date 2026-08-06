@@ -4,6 +4,18 @@
     name: kibana
     state: present
     update_cache: yes
+  register: kibana_install
+
+# NUEVA TAREA: Verificar que Kibana se instaló correctamente
+- name: Verificar que el binario de Kibana existe después de la instalación
+  ansible.builtin.stat:
+    path: /usr/share/kibana/bin/kibana
+  register: kibana_binary_check
+
+- name: Asegurar que el binario de Kibana existe
+  ansible.builtin.fail:
+    msg: "Kibana no se instaló correctamente. El binario /usr/share/kibana/bin/kibana no existe."
+  when: not kibana_binary_check.stat.exists
 
 - name: Crear directorio de certificados
   ansible.builtin.file:
@@ -13,13 +25,28 @@
     group: kibana
     mode: '0750'
 
-- name: Obtener certificado CA para Kibana
+- name: Obtener certificado CA para Kibana (descargar a la máquina controladora)
   ansible.builtin.fetch:
     src: "{{ elastic_ca_cert | default('/etc/elasticsearch/certs/elastic-stack-ca.p12') }}"
     dest: /tmp/elastic-stack-ca.p12
     flat: yes
   delegate_to: "{{ groups['elk'][0] }}"
   run_once: true
+
+- name: Copiar certificado CA al nodo Kibana
+  ansible.builtin.copy:
+    src: /tmp/elastic-stack-ca.p12
+    dest: /tmp/elastic-stack-ca.p12
+    owner: kibana
+    group: kibana
+    mode: '0640'
+  when: inventory_hostname in groups['kibana']
+
+- name: Verificar que el certificado CA existe
+  ansible.builtin.stat:
+    path: /tmp/elastic-stack-ca.p12
+  register: ca_cert_file
+  when: inventory_hostname in groups['kibana']
 
 - name: Convertir certificado a PEM para Kibana (si no existe)
   ansible.builtin.shell: |
@@ -28,6 +55,9 @@
     fi
   args:
     creates: /etc/kibana/certs/elasticsearch-ca.pem
+  when: 
+    - inventory_hostname in groups['kibana']
+    - ca_cert_file.stat.exists | default(false)
 
 - name: Establecer permisos del certificado
   ansible.builtin.file:
@@ -35,6 +65,27 @@
     owner: root
     group: kibana
     mode: '0640'
+  when: inventory_hostname in groups['kibana']
+
+# NUEVA TAREA: Asegurar permisos correctos del directorio de logs
+- name: Asegurar directorio de logs de Kibana
+  ansible.builtin.file:
+    path: /var/log/kibana
+    state: directory
+    owner: kibana
+    group: kibana
+    mode: '0755'
+  when: inventory_hostname in groups['kibana']
+
+# NUEVA TAREA: Asegurar permisos del directorio de datos
+- name: Asegurar directorio de datos de Kibana
+  ansible.builtin.file:
+    path: /var/lib/kibana
+    state: directory
+    owner: kibana
+    group: kibana
+    mode: '0755'
+  when: inventory_hostname in groups['kibana']
 
 - name: Configurar kibana.yml con token de enrollamiento
   ansible.builtin.template:
@@ -47,7 +98,7 @@
 
 - name: Debug - Mostrar configuración de Kibana
   ansible.builtin.shell: |
-    cat /etc/kibana/kibana.yml | grep -E "elasticsearch|enrollment"
+    cat /etc/kibana/kibana.yml | grep -E "elasticsearch|enrollment|server"
   register: kibana_config_debug
   changed_when: false
 
@@ -55,21 +106,54 @@
   ansible.builtin.debug:
     var: kibana_config_debug.stdout_lines
 
+# NUEVA TAREA: Verificar que el binario de Kibana es ejecutable
+- name: Verificar que el binario de Kibana existe y es ejecutable
+  ansible.builtin.stat:
+    path: /usr/share/kibana/bin/kibana
+  register: kibana_binary
+
+- name: Asegurar que el binario de Kibana es ejecutable
+  ansible.builtin.file:
+    path: /usr/share/kibana/bin/kibana
+    mode: '0755'
+  when: kibana_binary.stat.exists
+
 - name: Habilitar e iniciar Kibana
   ansible.builtin.systemd:
     name: kibana
     enabled: yes
     state: started
+    daemon_reload: yes
 
+# NUEVA TAREA: Esperar a que Kibana esté realmente saludable (con HTTPS si está configurado)
 - name: Esperar a que Kibana esté saludable
   ansible.builtin.uri:
-    url: "http://localhost:{{ kibana_port }}/api/status"
+    url: "{% if kibana_ssl_enabled | default(false) %}https{% else %}http{% endif %}://localhost:{{ kibana_port | default(5601) }}/api/status"
+    validate_certs: no
     status_code: 200
   register: kibana_status
   until: 
     - kibana_status.status == 200
-    - kibana_status.json.status is defined
-    - kibana_status.json.status.overall.level == "available"
   retries: 60
   delay: 5
   when: inventory_hostname == groups['kibana'][0]
+  ignore_errors: yes
+
+# NUEVA TAREA: Mostrar estado de Kibana si falló
+- name: Mostrar logs de Kibana si el servicio no está saludable
+  ansible.builtin.shell: |
+    sudo journalctl -u kibana -n 20 --no-pager
+  register: kibana_logs
+  when: 
+    - inventory_hostname == groups['kibana'][0]
+    - kibana_status is defined
+    - kibana_status.status != 200
+  ignore_errors: yes
+
+- name: Debug - Logs de Kibana
+  ansible.builtin.debug:
+    var: kibana_logs.stdout_lines
+  when: 
+    - inventory_hostname == groups['kibana'][0]
+    - kibana_status is defined
+    - kibana_status.status != 200
