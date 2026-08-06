@@ -1,4 +1,36 @@
 ---
+- name: Verificar estado actual de Kibana
+  ansible.builtin.stat:
+    path: /usr/share/kibana/bin/kibana
+  register: kibana_binary_check
+
+# NUEVA TAREA: Si el binario no existe, forzar reinstalación completa
+- name: Reinstalar Kibana si el binario no existe
+  block:
+    - name: Purgar Kibana si existe pero está corrupto
+      ansible.builtin.apt:
+        name: kibana
+        state: absent
+        purge: yes
+      when: not kibana_binary_check.stat.exists
+
+    - name: Limpiar directorios residuales de Kibana
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /usr/share/kibana
+        - /etc/kibana
+        - /var/log/kibana
+        - /var/lib/kibana
+      when: not kibana_binary_check.stat.exists
+      ignore_errors: yes
+
+    - name: Actualizar caché de apt
+      ansible.builtin.apt:
+        update_cache: yes
+      when: not kibana_binary_check.stat.exists
+
 - name: Instalar Kibana
   ansible.builtin.apt:
     name: kibana
