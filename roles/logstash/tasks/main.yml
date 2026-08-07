@@ -24,6 +24,7 @@
   delegate_to: "{{ groups['elk'][0] }}"
   run_once: true
 
+# CORREGIDO: Usar monitoring en lugar de logstash
 - name: Copiar certificado CA al nodo Logstash
   ansible.builtin.copy:
     src: /tmp/elastic-stack-ca.p12
@@ -31,14 +32,14 @@
     owner: logstash
     group: logstash
     mode: '0640'
-  when: inventory_hostname in groups['logstash']
+  when: inventory_hostname in groups['monitoring']
 
 - name: Convertir certificado a PEM para Logstash
   ansible.builtin.shell: |
     openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/logstash/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
   args:
     creates: /etc/logstash/certs/elasticsearch-ca.pem
-  when: inventory_hostname in groups['logstash']
+  when: inventory_hostname in groups['monitoring']
 
 - name: Establecer permisos del certificado
   ansible.builtin.file:
@@ -46,46 +47,39 @@
     owner: root
     group: logstash
     mode: '0640'
-  when: inventory_hostname in groups['logstash']
+  when: inventory_hostname in groups['monitoring']
 
-- name: Desplegar archivos de configuración de pipelines (archivos estáticos)
+- name: Desplegar archivos de configuración de pipelines
   ansible.builtin.copy:
-    src: "conf.d/{{ item }}"
-    dest: "/etc/logstash/conf.d/{{ item }}"
+    src: conf.d/
+    dest: /etc/logstash/conf.d/
     owner: root
     group: logstash
     mode: '0644'
-  loop:
-    - 01-input.conf
-    - 10-filter-syslog-base.conf
-    - 20-filter-sw-core-puerta-254.conf
-    - 50-filter-haproxy.conf
-    - 60-filter-switches.conf
-    - 90-filter.conf
-    - 99-output.conf
+    directory_mode: '0750'
+  when: inventory_hostname in groups['monitoring']
   notify: Reiniciar Logstash
 
-# NUEVA TAREA: Verificar la sintaxis de la configuración de Logstash
 - name: Verificar sintaxis de configuración de Logstash
   ansible.builtin.command: |
     /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/
   register: logstash_config_test
   changed_when: false
   failed_when: false
-  when: inventory_hostname in groups['logstash']
+  when: inventory_hostname in groups['monitoring']
 
 - name: Debug - Resultado de verificación de sintaxis
   ansible.builtin.debug:
     var: logstash_config_test.stdout_lines
   when: 
-    - inventory_hostname in groups['logstash']
+    - inventory_hostname in groups['monitoring']
     - logstash_config_test is defined
 
 - name: Fallar si la configuración de Logstash tiene errores
   ansible.builtin.fail:
-    msg: "La configuración de Logstash tiene errores de sintaxis. Verifica los archivos en /etc/logstash/conf.d/"
+    msg: "La configuración de Logstash tiene errores. Verifica los archivos en /etc/logstash/conf.d/"
   when: 
-    - inventory_hostname in groups['logstash']
+    - inventory_hostname in groups['monitoring']
     - logstash_config_test.rc != 0
 
 - name: Habilitar e iniciar Logstash
@@ -94,6 +88,13 @@
     enabled: yes
     state: started
     daemon_reload: yes
+
+- name: Esperar a que Logstash inicie
+  ansible.builtin.wait_for:
+    port: 9600
+    host: localhost
+    timeout: 60
+  when: inventory_hostname in groups['monitoring']
 
 - name: Verificar que Logstash está corriendo
   ansible.builtin.systemd:
@@ -104,4 +105,22 @@
 - name: Debug - Estado de Logstash
   ansible.builtin.debug:
     msg: "Logstash está {{ 'corriendo' if logstash_status.status.ActiveState == 'active' else 'detenido' }}"
-  when: inventory_hostname in groups['logstash']
+  when: inventory_hostname in groups['monitoring']
+
+- name: Verificar API de Logstash
+  ansible.builtin.uri:
+    url: "http://localhost:9600/_node/stats"
+    status_code: 200
+  register: logstash_api
+  until: logstash_api.status == 200
+  retries: 10
+  delay: 5
+  when: inventory_hostname in groups['monitoring']
+  ignore_errors: yes
+
+- name: Debug - Estado de API de Logstash
+  ansible.builtin.debug:
+    msg: "API de Logstash: {{ 'OK' if logstash_api.status == 200 else 'FAILED' }}"
+  when: 
+    - inventory_hostname in groups['monitoring']
+    - logstash_api is defined
