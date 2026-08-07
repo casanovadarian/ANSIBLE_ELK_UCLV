@@ -88,13 +88,10 @@
 
 
     ####################################################
-    # Repositorio Elastic
+    # Repositorio Elastic - BUSCAR Y ELIMINAR TODOS
     ####################################################
 
-    elastic_repository:
-
-      - /etc/apt/sources.list.d/elastic.list
-
+    # Ya no usamos una lista fija, usaremos find para buscar
 
     ####################################################
     # Llaves GPG
@@ -191,11 +188,37 @@
   ####################################################
 
 
-    - name: Eliminar repositorio Elastic
+    - name: Buscar archivos de repositorio de Elastic
+      ansible.builtin.find:
+        paths: /etc/apt/sources.list.d/
+        patterns: "*elastic*"
+        file_type: file
+      register: elastic_repo_files
+
+
+    - name: Eliminar archivos de repositorio de Elastic
       ansible.builtin.file:
-        path: "{{ item }}"
+        path: "{{ item.path }}"
         state: absent
-      loop: "{{ elastic_repository }}"
+      loop: "{{ elastic_repo_files.files }}"
+      when: elastic_repo_files.files | length > 0
+
+
+    - name: Buscar archivos de repositorio de Elastic (alternativos)
+      ansible.builtin.find:
+        paths: /etc/apt/
+        patterns: "*elastic*"
+        file_type: file
+        recurse: yes
+      register: elastic_repo_files_alt
+
+
+    - name: Eliminar archivos de repositorio de Elastic (alternativos)
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ elastic_repo_files_alt.files }}"
+      when: elastic_repo_files_alt.files | length > 0
 
 
     - name: Eliminar llave GPG Elastic
@@ -235,7 +258,19 @@
 
 
   ####################################################
-  # 7. ELIMINAR CREDENCIALES LOCALES
+  # 7. ACTUALIZAR CACHE APT (SIEMPRE)
+  ####################################################
+
+
+    - name: Actualizar cache apt después de limpieza
+      ansible.builtin.apt:
+        update_cache: yes
+      ignore_errors: true
+
+
+
+  ####################################################
+  # 8. ELIMINAR CREDENCIALES LOCALES
   ####################################################
 
 
@@ -266,7 +301,7 @@
 
 
   ####################################################
-  # 8. SYSTEMD
+  # 9. SYSTEMD
   ####################################################
 
 
@@ -279,18 +314,6 @@
       ansible.builtin.command:
         cmd: systemctl reset-failed
       changed_when: false
-
-
-
-  ####################################################
-  # 9. ACTUALIZAR CACHE APT
-  ####################################################
-
-
-    - name: Actualizar cache apt
-      ansible.builtin.apt:
-        update_cache: yes
-      when: purge_packages
 
 
 
@@ -319,8 +342,9 @@
           ✔ Configuración
           ✔ Logs
           ✔ Certificados
-          ✔ Repositorio Elastic
+          ✔ Repositorios Elastic
           ✔ Llaves GPG
+          ✔ Cache APT actualizado
 
           Paquetes eliminados:
           {{ 'SI' if purge_packages else 'NO' }}
