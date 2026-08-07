@@ -4,6 +4,17 @@
     name: logstash
     state: present
     update_cache: yes
+  register: logstash_install
+
+- name: Verificar que el binario de Logstash existe después de la instalación
+  ansible.builtin.stat:
+    path: /usr/share/logstash/bin/logstash
+  register: logstash_binary_check
+
+- name: Asegurar que el binario de Logstash existe
+  ansible.builtin.fail:
+    msg: "Logstash no se instaló correctamente. El binario /usr/share/logstash/bin/logstash no existe."
+  when: not logstash_binary_check.stat.exists
 
 - name: Crear directorios de configuración y certificados
   ansible.builtin.file:
@@ -24,7 +35,6 @@
   delegate_to: "{{ groups['elk'][0] }}"
   run_once: true
 
-# CORREGIDO: Usar monitoring en lugar de logstash
 - name: Copiar certificado CA al nodo Logstash
   ansible.builtin.copy:
     src: /tmp/elastic-stack-ca.p12
@@ -34,12 +44,21 @@
     mode: '0640'
   when: inventory_hostname in groups['monitoring']
 
+- name: Verificar que el certificado CA existe
+  ansible.builtin.stat:
+    path: /tmp/elastic-stack-ca.p12
+  register: ca_cert_file
+
 - name: Convertir certificado a PEM para Logstash
   ansible.builtin.shell: |
-    openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/logstash/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
+    if [ ! -f /etc/logstash/certs/elasticsearch-ca.pem ]; then
+      openssl pkcs12 -in /tmp/elastic-stack-ca.p12 -out /etc/logstash/certs/elasticsearch-ca.pem -cacerts -nokeys -passin pass:
+    fi
   args:
     creates: /etc/logstash/certs/elasticsearch-ca.pem
-  when: inventory_hostname in groups['monitoring']
+  when: 
+    - inventory_hostname in groups['monitoring']
+    - ca_cert_file.stat.exists
 
 - name: Establecer permisos del certificado
   ansible.builtin.file:
@@ -61,8 +80,8 @@
   notify: Reiniciar Logstash
 
 - name: Verificar sintaxis de configuración de Logstash
-  ansible.builtin.command: |
-    /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/
+  ansible.builtin.shell: |
+    /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/ 2>&1
   register: logstash_config_test
   changed_when: false
   failed_when: false
@@ -70,17 +89,42 @@
 
 - name: Debug - Resultado de verificación de sintaxis
   ansible.builtin.debug:
-    var: logstash_config_test.stdout_lines
+    msg: |
+      Código de salida: {{ logstash_config_test.rc }}
+      {{ logstash_config_test.stdout_lines | join('\n') if logstash_config_test.stdout_lines is defined else '' }}
+      {{ logstash_config_test.stderr_lines | join('\n') if logstash_config_test.stderr_lines is defined else '' }}
   when: 
     - inventory_hostname in groups['monitoring']
     - logstash_config_test is defined
+    - logstash_config_test.rc != 0
 
 - name: Fallar si la configuración de Logstash tiene errores
   ansible.builtin.fail:
-    msg: "La configuración de Logstash tiene errores. Verifica los archivos en /etc/logstash/conf.d/"
+    msg: |
+      La configuración de Logstash tiene errores.
+      Código de salida: {{ logstash_config_test.rc }}
+      Error: {{ logstash_config_test.stderr_lines | join('\n') if logstash_config_test.stderr_lines is defined else logstash_config_test.stdout_lines | join('\n') }}
   when: 
     - inventory_hostname in groups['monitoring']
     - logstash_config_test.rc != 0
+
+- name: Asegurar directorio de logs de Logstash
+  ansible.builtin.file:
+    path: /var/log/logstash
+    state: directory
+    owner: logstash
+    group: logstash
+    mode: '0755'
+  when: inventory_hostname in groups['monitoring']
+
+- name: Asegurar directorio de datos de Logstash
+  ansible.builtin.file:
+    path: /var/lib/logstash
+    state: directory
+    owner: logstash
+    group: logstash
+    mode: '0755'
+  when: inventory_hostname in groups['monitoring']
 
 - name: Habilitar e iniciar Logstash
   ansible.builtin.systemd:
@@ -89,22 +133,11 @@
     state: started
     daemon_reload: yes
 
-- name: Esperar a que Logstash inicie
+- name: Esperar a que Logstash inicie (verificar puerto)
   ansible.builtin.wait_for:
     port: 9600
     host: localhost
     timeout: 60
-  when: inventory_hostname in groups['monitoring']
-
-- name: Verificar que Logstash está corriendo
-  ansible.builtin.systemd:
-    name: logstash
-    state: started
-  register: logstash_status
-
-- name: Debug - Estado de Logstash
-  ansible.builtin.debug:
-    msg: "Logstash está {{ 'corriendo' if logstash_status.status.ActiveState == 'active' else 'detenido' }}"
   when: inventory_hostname in groups['monitoring']
 
 - name: Verificar API de Logstash
@@ -118,9 +151,9 @@
   when: inventory_hostname in groups['monitoring']
   ignore_errors: yes
 
-- name: Debug - Estado de API de Logstash
+- name: Debug - Estado de Logstash
   ansible.builtin.debug:
-    msg: "API de Logstash: {{ 'OK' if logstash_api.status == 200 else 'FAILED' }}"
-  when: 
-    - inventory_hostname in groups['monitoring']
-    - logstash_api is defined
+    msg: |
+      Logstash API: {{ 'OK' if logstash_api.status == 200 else 'FAILED' }}
+      Logstash está corriendo: {{ logstash_status.status.ActiveState == 'active' if logstash_status is defined else 'desconocido' }}
+  when: inventory_hostname in groups['monitoring']
